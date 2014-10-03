@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">SMSMessaging</string>
+    <string name="message">Message</string>
+    <string name="number">Enter the phone number of recipient</string>
+    <string name="send">Send SMS</string>
+    <string name="action_settings">Settings</string>
+
+
+</resources>
