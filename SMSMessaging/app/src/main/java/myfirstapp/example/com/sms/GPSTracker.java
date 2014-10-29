@@ -1,4 +1,4 @@
-package com.example.gpstutorial;
+package myfirstapp.example.com.sms;
 
 import android.app.AlertDialog;
 import android.app.Service;
@@ -154,7 +154,8 @@ public class GPSTracker extends Service implements LocationListener {
   
         // On pressing Settings button
         alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog,int which) {
+            @Override
+			public void onClick(DialogInterface dialog,int which) {
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 mContext.startActivity(intent);
             }
@@ -162,7 +163,8 @@ public class GPSTracker extends Service implements LocationListener {
   
         // on pressing cancel button
         alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
+            @Override
+			public void onClick(DialogInterface dialog, int which) {
             dialog.cancel();
             }
         });
