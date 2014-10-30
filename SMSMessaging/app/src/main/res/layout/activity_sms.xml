@@ -4,7 +4,7 @@
     android:layout_height="fill_parent"
     android:background="#e1e1e1"
     >
-    <TextView
+    <!-- <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/number"
@@ -27,7 +27,7 @@
         android:gravity="top"
         android:hint = "@string/default_message"
         android:inputType="text|textCapSentences"
-        />
+        /> -->
     <Button
         android:id="@+id/btnSendSMS"
         android:layout_width="fill_parent"

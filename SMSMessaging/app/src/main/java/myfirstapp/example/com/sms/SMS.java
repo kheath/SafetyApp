@@ -24,8 +24,8 @@ import android.widget.Toast;
 public class SMS extends Activity
 {
     Button btnSendSMS;
-    EditText txtPhoneNo;
-    EditText txtMessage;
+    String txtPhoneNo;
+    String txtMessage;
     GPSTracker gps;
     double latitude;
     double longitude;
@@ -38,8 +38,8 @@ public class SMS extends Activity
         setContentView(R.layout.activity_sms);
 
         btnSendSMS = (Button) findViewById(R.id.btnSendSMS);
-        txtPhoneNo = (EditText) findViewById(R.id.txtPhoneNo);
-        txtMessage = (EditText) findViewById(R.id.txtMessage);
+//        txtPhoneNo = (EditText) findViewById(R.id.txtPhoneNo);
+//        txtMessage = (EditText) findViewById(R.id.txtMessage);
      // create GPS object
         gps = new GPSTracker(SMS.this);
         
@@ -66,30 +66,33 @@ public class SMS extends Activity
                     gps.showSettingsAlert();
                 }
             	
-                String phoneNo = txtPhoneNo.getText().toString();
-                String message = txtMessage.getText().toString();
+//                String phoneNo = txtPhoneNo.getText().toString();
+//                String message = txtMessage.getText().toString();
                 
-                if (message.length()<1)
+                if (txtMessage.length()<1)
                 {
-                	message = "Yarr matey, I be in a bit of a pickle.";
+                	txtMessage = "Yarr matey, I be in a bit of a pickle.";
                 }
 //                txtMessage.setText(message);
-                message = message + "\n Me location is - \nLat: " + latitude + "\nLong: " + longitude;
+                txtMessage = txtMessage + "\n Me location is - \nLat: " + latitude + "\nLong: " + longitude;
                 
-                if (isValidPhoneNumber(phoneNo))
+                if (isValidPhoneNumber(txtPhoneNo))
                 {
-                	if (phoneNo.length() == 10)
+                	if (txtPhoneNo.length() == 10)
                 	{
-                		phoneNo = "1"+phoneNo;
-                		System.out.println("Assuming there should be a 1 in front. \nPhone number: "+phoneNo);
-                    	sendSMS(phoneNo, message);
+                		txtPhoneNo = "1"+txtPhoneNo;
+                		System.out.println("Assuming there should be a 1 in front. \nPhone number: "+txtPhoneNo);
+                    	sendSMS(txtPhoneNo, txtMessage);
                 	}
-                	System.out.println("Phone number: "+phoneNo);
-                	sendSMS(phoneNo, message);
+                	else
+                	{
+                		System.out.println("Phone number: "+txtPhoneNo);
+                		sendSMS(txtPhoneNo, txtMessage);
+                	}
                 }
-                else if (!isValidPhoneNumber(phoneNo))
+                else if (!isValidPhoneNumber(txtPhoneNo))
                 {
-               		txtPhoneNo.setError("Please enter a valid phone number in international format.");
+                	System.out.println(txtPhoneNo + " is not a valid phone number!");
                 }
                 else
                 {
@@ -169,8 +172,8 @@ public class SMS extends Activity
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String newPhoneNo = preferences.getString("pref_recipientNumber", "");
         String newMessage = preferences.getString("pref_message", "");
-        txtPhoneNo.setText(newPhoneNo, BufferType.NORMAL);
-        txtMessage.setText(newMessage, BufferType.NORMAL);
+        txtPhoneNo = newPhoneNo;
+        txtMessage = newMessage;
     }
     
 }
