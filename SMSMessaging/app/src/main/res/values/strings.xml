@@ -11,6 +11,12 @@
     <!-- Settings -->
     <string name="pref_recipientNumber">Recipient number</string>
     <string name="pref_message">Message body</string>
+    
+    <!-- Second button - call da police -->
+    <string name="ohShit">Oh Shit!</string>
+    
+    <!-- Third button - everything in okay -->
+    <string name="itsOkay">Nvmd!</string>
 
 
 </resources>

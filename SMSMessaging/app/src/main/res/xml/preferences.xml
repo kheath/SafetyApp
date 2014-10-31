@@ -8,5 +8,5 @@
     <EditTextPreference
         android:key="pref_message"
         android:title="@string/pref_message"
-        android:defaultValue="test" />
+        android:defaultValue="@string/default_message" />
 </PreferenceScreen>
