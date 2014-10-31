@@ -24,16 +24,20 @@ import android.widget.Toast;
 
 public class SMS extends Activity
 {
-    Button btnSendSMS;
-    Button btnOhShit;
-    Button btnItsOkay;
-    String txtPhoneNo;
-    String txtMessage;
-    String eNumber;
-    GPSTracker gps;
+	
+	
+    Button btnSendSMS;	// Initialize button to send an alert to a friend
+    Button btnOhShit;	// Initialize button to call and emergency number
+    Button btnItsOkay;	// Initialize button to send an all-clear text to a friend
+    String txtPhoneNo;	// Initialize phone number
+    String txtMessage;	// Initialize alert message
+    String kkMessage;	// Initialize all-clear message
+    String eNumber;	// Initialize emergency number
+    GPSTracker gps;	// Initialize gps
     double latitude;
     double longitude;
     
+	// Initialize this to find out if a phone is in use.
     TelephonyManager tm;
 
     /** Called when the activity is first created. */
@@ -50,10 +54,12 @@ public class SMS extends Activity
         // Put in the "emergency" phone number
         eNumber = "";
         
+        kkMessage = "Yarr matey, splice the mainbrace.";
+        
      // create GPS object
         gps = new GPSTracker(SMS.this);
         
-        tm=(TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);  
+        tm = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);  
         
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         
@@ -69,43 +75,34 @@ public class SMS extends Activity
                     latitude = gps.getLatitude();
                     longitude = gps.getLongitude();
                      
-                    // \n is for new line
-                        
+
                 }else{
                     // can't get location
                     // GPS or Network is not enabled
                     // Ask user to enable GPS/network in settings
                     gps.showSettingsAlert();
                 }
-            	
-//                String phoneNo = txtPhoneNo.getText().toString();
-//                String message = txtMessage.getText().toString();
                 
                 if (txtMessage.length()<1)
                 {
                 	txtMessage = "Yarr matey, I be in a bit of a pickle.";
                 }
-//                txtMessage.setText(message);
                 txtMessage = txtMessage + "\n Me location is - \nLat: " + latitude + "\nLong: " + longitude;
                 
-                if (isValidPhoneNumber(txtPhoneNo))
+                if (isValidPhoneNumber(txtPhoneNo, getApplicationContext()))
                 {
                 	if (txtPhoneNo.length() == 10)
                 	{
                 		txtPhoneNo = "1"+txtPhoneNo;
-                		System.out.println("Assuming there should be a 1 in front. \nPhone number: "+txtPhoneNo);
+//                		System.out.println("Assuming there should be a 1 in front. \nPhone number: "+txtPhoneNo);
                     	
                 	}
-                	else
-                	{
-                		System.out.println("Phone number: "+txtPhoneNo);
-                		
-                	}
+                	
                 	sendSMS(txtPhoneNo, txtMessage, tm);
                 }
-                else if (!isValidPhoneNumber(txtPhoneNo))
+                else if (!isValidPhoneNumber(txtPhoneNo, getApplicationContext()))
                 {
-                	System.out.println(txtPhoneNo + " is not a valid phone number!");
+//                	System.out.println(txtPhoneNo + " is not a valid phone number!");
                 }
                 else
                 {
@@ -115,9 +112,7 @@ public class SMS extends Activity
                 	toast.setGravity(Gravity.CENTER, 0, 0);
                 	toast.show();
                 }
-//                	Toast.makeText(getBaseContext(),
-//                            "Please enter both a valid phone number and message.",
-//                            Toast.LENGTH_SHORT).setGravity(Gravity.CENTER, 0, 0).show();
+
             }
         });
         
@@ -130,7 +125,7 @@ public class SMS extends Activity
             {
             	if(isPhone(tm))
             	{
-            		if (isValidPhoneNumber(eNumber))
+            		if (isValidPhoneNumber(eNumber, getApplicationContext()))
             		{
             			Intent callIntent = new Intent(Intent.ACTION_CALL, Uri.parse(eNumber)); 
             			startActivity(callIntent);
@@ -152,12 +147,12 @@ public class SMS extends Activity
         
         btnItsOkay.setOnClickListener(new View.OnClickListener()
         {
-        	String kkMessage = "Yarr matey, splice the mainbrace.";
+        	
             @Override
 			public void onClick(View v)
             {
                 
-                if (isValidPhoneNumber(txtPhoneNo))
+                if (isValidPhoneNumber(txtPhoneNo, getApplicationContext()))
                 {
                 	if (txtPhoneNo.length() == 10)
                 	{
@@ -165,16 +160,12 @@ public class SMS extends Activity
                 		System.out.println("Assuming there should be a 1 in front. \nPhone number: "+txtPhoneNo);
                     	
                 	}
-                	else
-                	{
-                		System.out.println("Phone number: "+txtPhoneNo);
-                		
-                	}
+                
                 	sendSMS(txtPhoneNo, kkMessage, tm);
                 }
-                else if (!isValidPhoneNumber(txtPhoneNo))
+                else if (!isValidPhoneNumber(txtPhoneNo, getApplicationContext()))
                 {
-                	System.out.println(txtPhoneNo + " is not a valid phone number!");
+//                	System.out.println(txtPhoneNo + " is not a valid phone number!");
                 }
                 else
                 {
@@ -184,9 +175,7 @@ public class SMS extends Activity
                 	toast.setGravity(Gravity.CENTER, 0, 0);
                 	toast.show();
                 }
-//                	Toast.makeText(getBaseContext(),
-//                            "Please enter both a valid phone number and message.",
-//                            Toast.LENGTH_SHORT).setGravity(Gravity.CENTER, 0, 0).show();
+
             }
         });
         
@@ -217,24 +206,31 @@ public class SMS extends Activity
 
     }
     
-    public static boolean isValidPhoneNumber(String phoneNum)
+    // Checks to see if a phone number is valid (11 or 10 digits).  If not, it displays a toast message and returns false
+    public static boolean isValidPhoneNumber(String phoneNum, Context context)
     {
-    	boolean isValid = false;
    
         Pattern pattern = Pattern.compile("[0-9]{10,11}");
         Matcher matcher = pattern.matcher(phoneNum);
    
         if (matcher.matches()) {
       	  System.out.println("Phone Number is Valid");
-      	  isValid = true;
+      	  return true;
         }
         else
         {
       	  System.out.println("Not a valid phone number!");
+      	  Toast toast = Toast.makeText(context,
+      			  "You aren't using a phone, brah",
+      			  Toast.LENGTH_SHORT);
+      	  toast.setGravity(Gravity.CENTER, 0, 0);
+      	  toast.show();
+      	  return false;
         }
-        return isValid;
+        
     }
     
+    // Checks to see if this app is running on a phone
     public static boolean isPhone(TelephonyManager device)
     {
     	
