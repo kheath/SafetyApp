@@ -2,28 +2,43 @@
 
 package myfirstapp.example.com.sms;
 
-import myfirstapp.example.com.sms.GPSTracker;
-
-import android.app.Activity;
-import android.os.Bundle;
-import android.telephony.SmsManager;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
-import android.view.Gravity;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
+
 public class SMS extends Activity
 {
-    Button btnSendSMS;
-    EditText txtPhoneNo;
-    EditText txtMessage;
-    GPSTracker gps;
+	
+	
+    Button btnSendSMS;	// Initialize button to send an alert to a friend
+    Button btnOhShit;	// Initialize button to call and emergency number
+    Button btnItsOkay;	// Initialize button to send an all-clear text to a friend
+    String txtPhoneNo;	// Initialize phone number
+    String txtMessage;	// Initialize alert message
+    String kkMessage;	// Initialize all-clear message
+    String eNumber;	// Initialize emergency number
+    GPSTracker gps;	// Initialize gps
     double latitude;
     double longitude;
+    
+	// Initialize this to find out if a phone is in use.
+    TelephonyManager tm;
 
     /** Called when the activity is first created. */
     @Override
@@ -33,11 +48,21 @@ public class SMS extends Activity
         setContentView(R.layout.activity_sms);
 
         btnSendSMS = (Button) findViewById(R.id.btnSendSMS);
-        txtPhoneNo = (EditText) findViewById(R.id.txtPhoneNo);
-        txtMessage = (EditText) findViewById(R.id.txtMessage);
+        btnOhShit = (Button) findViewById(R.id.btnOhShit);
+        btnItsOkay = (Button) findViewById(R.id.btnItsOkay);
+        
+        // Put in the "emergency" phone number
+        eNumber = "";
+        
+        kkMessage = "Yarr matey, splice the mainbrace.";
+        
      // create GPS object
         gps = new GPSTracker(SMS.this);
-
+        
+        tm = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);  
+        
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        
         btnSendSMS.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -50,39 +75,34 @@ public class SMS extends Activity
                     latitude = gps.getLatitude();
                     longitude = gps.getLongitude();
                      
-                    // \n is for new line
-                        
+
                 }else{
                     // can't get location
                     // GPS or Network is not enabled
                     // Ask user to enable GPS/network in settings
                     gps.showSettingsAlert();
                 }
-            	
-                String phoneNo = txtPhoneNo.getText().toString();
-                String message = txtMessage.getText().toString();
                 
-                if (message.length()<1)
+                if (txtMessage.length()<1)
                 {
-                	message = "Yarr matey, I be in a bit of a pickle.";
+                	txtMessage = "Yarr matey, I be in a bit of a pickle.";
                 }
-                txtMessage.setText(message);
-                message = message + "\n Me location is - \nLat: " + latitude + "\nLong: " + longitude;
+                txtMessage = txtMessage + "\n Me location is - \nLat: " + latitude + "\nLong: " + longitude;
                 
-                if (isValidPhoneNumber(phoneNo))
+                if (isValidPhoneNumber(txtPhoneNo, getApplicationContext()))
                 {
-                	if (phoneNo.length() == 10)
+                	if (txtPhoneNo.length() == 10)
                 	{
-                		phoneNo = "1"+phoneNo;
-                		System.out.println("Assuming there should be a 1 in front. \nPhone number: "+phoneNo);
-                    	sendSMS(phoneNo, message);
+                		txtPhoneNo = "1"+txtPhoneNo;
+//                		System.out.println("Assuming there should be a 1 in front. \nPhone number: "+txtPhoneNo);
+                    	
                 	}
-                	System.out.println("Phone number: "+phoneNo);
-                	sendSMS(phoneNo, message);
+                	
+                	sendSMS(txtPhoneNo, txtMessage, tm);
                 }
-                else if (!isValidPhoneNumber(phoneNo))
+                else if (!isValidPhoneNumber(txtPhoneNo, getApplicationContext()))
                 {
-               		txtPhoneNo.setError("Please enter a valid phone number in international format.");
+//                	System.out.println(txtPhoneNo + " is not a valid phone number!");
                 }
                 else
                 {
@@ -92,47 +112,167 @@ public class SMS extends Activity
                 	toast.setGravity(Gravity.CENTER, 0, 0);
                 	toast.show();
                 }
-//                	Toast.makeText(getBaseContext(),
-//                            "Please enter both a valid phone number and message.",
-//                            Toast.LENGTH_SHORT).setGravity(Gravity.CENTER, 0, 0).show();
+
             }
         });
+        
+        // Call da police!
+        
+        btnOhShit.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+			public void onClick(View v)
+            {
+            	if(isPhone(tm))
+            	{
+            		if (isValidPhoneNumber(eNumber, getApplicationContext()))
+            		{
+            			Intent callIntent = new Intent(Intent.ACTION_CALL, Uri.parse(eNumber)); 
+            			startActivity(callIntent);
+            		}
+            	}
+            	else
+            	{
+            		 
+            		Toast toast = Toast.makeText(getBaseContext(),
+            				"Shit brah, get a phone!",
+            				Toast.LENGTH_SHORT);
+            		toast.setGravity(Gravity.CENTER, 0, 0);
+            		toast.show();  
+            	}
+            }
+        });
+        
+        // It's all cool, brah
+        
+        btnItsOkay.setOnClickListener(new View.OnClickListener()
+        {
+        	
+            @Override
+			public void onClick(View v)
+            {
+                
+                if (isValidPhoneNumber(txtPhoneNo, getApplicationContext()))
+                {
+                	if (txtPhoneNo.length() == 10)
+                	{
+                		txtPhoneNo = "1"+txtPhoneNo;
+                		System.out.println("Assuming there should be a 1 in front. \nPhone number: "+txtPhoneNo);
+                    	
+                	}
+                
+                	sendSMS(txtPhoneNo, kkMessage, tm);
+                }
+                else if (!isValidPhoneNumber(txtPhoneNo, getApplicationContext()))
+                {
+//                	System.out.println(txtPhoneNo + " is not a valid phone number!");
+                }
+                else
+                {
+                	Toast toast = Toast.makeText(getBaseContext(),
+                            "Please enter a valid phone number.",
+                            Toast.LENGTH_SHORT);
+                	toast.setGravity(Gravity.CENTER, 0, 0);
+                	toast.show();
+                }
+
+            }
+        });
+        
     }
 
     //---sends an SMS message to another device---
-    private void sendSMS(String phoneNumber, String message)
+    private void sendSMS(String phoneNumber, String message, TelephonyManager device)
     {
-    	SmsManager smsManager = SmsManager.getDefault();
-    	smsManager.sendTextMessage(phoneNumber, null, message, null, null);
-    	
-    	Toast toast = Toast.makeText(getBaseContext(),
-                "Message Sent.",
-                Toast.LENGTH_SHORT);
-    	toast.setGravity(Gravity.CENTER, 0, 0);
-    	toast.show();
-    	
-//        PendingIntent pi = PendingIntent.getActivity(this, 0,
-//                new Intent(this, SMS.class), 0);
-//        SmsManager sms = SmsManager.getDefault();
-//        sms.sendTextMessage(phoneNumber, null, message, pi, null);
+    	if(isPhone(device))
+    	{
+    		SmsManager smsManager = SmsManager.getDefault();
+    		smsManager.sendTextMessage(phoneNumber, null, message, null, null);
+
+    		Toast toast = Toast.makeText(getBaseContext(),
+    				"Message Sent.",
+    				Toast.LENGTH_SHORT);
+    		toast.setGravity(Gravity.CENTER, 0, 0);
+    		toast.show();
+    	}
+    	else
+    	{
+    		Toast toast = Toast.makeText(getBaseContext(),
+    				"You aren't using a phone, brah",
+    				Toast.LENGTH_SHORT);
+    		toast.setGravity(Gravity.CENTER, 0, 0);
+    		toast.show();
+    	}
+
     }
     
-    public static boolean isValidPhoneNumber(String phoneNum)
+    // Checks to see if a phone number is valid (11 or 10 digits).  If not, it displays a toast message and returns false
+    public static boolean isValidPhoneNumber(String phoneNum, Context context)
     {
-    	boolean isValid = false;
    
         Pattern pattern = Pattern.compile("[0-9]{10,11}");
         Matcher matcher = pattern.matcher(phoneNum);
    
         if (matcher.matches()) {
       	  System.out.println("Phone Number is Valid");
-      	  isValid = true;
+      	  return true;
         }
         else
         {
       	  System.out.println("Not a valid phone number!");
+      	  Toast toast = Toast.makeText(context,
+      			  "You aren't using a phone, brah",
+      			  Toast.LENGTH_SHORT);
+      	  toast.setGravity(Gravity.CENTER, 0, 0);
+      	  toast.show();
+      	  return false;
         }
-        return isValid;
+        
+    }
+    
+    // Checks to see if this app is running on a phone
+    public static boolean isPhone(TelephonyManager device)
+    {
+    	
+        if(device.getPhoneType() == 0)
+        {
+        	return false;
+        }
+        else
+        {
+        	return true;
+        }
+    }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.sm, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        if (item.getItemId() == R.id.action_settings) {
+            // Starts the Settings activity on top of the current activity
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String newPhoneNo = preferences.getString("pref_recipientNumber", "");
+        String newMessage = preferences.getString("pref_message", "");
+        txtPhoneNo = newPhoneNo;
+        txtMessage = newMessage;
     }
     
 }

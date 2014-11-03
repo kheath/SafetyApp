@@ -7,6 +7,16 @@
     <string name="send">Send Alert</string>
     <string name="action_settings">Settings</string>
     <string name="default_message">Yarr matey, I be in a bit of a pickle.</string>
+    
+    <!-- Settings -->
+    <string name="pref_recipientNumber">Recipient number</string>
+    <string name="pref_message">Message body</string>
+    
+    <!-- Second button - call da police -->
+    <string name="ohShit">Oh Shit!</string>
+    
+    <!-- Third button - everything in okay -->
+    <string name="itsOkay">Nvmd!</string>
 
 
 </resources>
