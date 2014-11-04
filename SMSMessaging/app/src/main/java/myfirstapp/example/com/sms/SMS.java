@@ -221,7 +221,7 @@ public class SMS extends Activity
         {
       	  System.out.println("Not a valid phone number!");
       	  Toast toast = Toast.makeText(context,
-      			  "You aren't using a phone, brah",
+      			  "Please provide a valid phone number",
       			  Toast.LENGTH_SHORT);
       	  toast.setGravity(Gravity.CENTER, 0, 0);
       	  toast.show();
