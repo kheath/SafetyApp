@@ -52,17 +52,18 @@ public class SMS extends Activity
         btnItsOkay = (Button) findViewById(R.id.btnItsOkay);
         
         // Put in the "emergency" phone number
-        eNumber = "";
+        eNumber = "4153200859";
         
-        kkMessage = "Yarr matey, splice the mainbrace.";
+        kkMessage = "Yarr matey, the seas be calm.";
         
-     // create GPS object
+        // create GPS object
         gps = new GPSTracker(SMS.this);
         
         tm = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);  
         
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         
+        // Code for the big blue button - this sends a text
         btnSendSMS.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -135,7 +136,7 @@ public class SMS extends Activity
             	{
             		 
             		Toast toast = Toast.makeText(getBaseContext(),
-            				"Shit brah, get a phone!",
+            				"This feature is only available on phones",
             				Toast.LENGTH_SHORT);
             		toast.setGravity(Gravity.CENTER, 0, 0);
             		toast.show();  

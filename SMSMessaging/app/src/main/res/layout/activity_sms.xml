@@ -12,8 +12,8 @@
         
         android:gravity="center"
         android:layout_margin="33dp"
-        android:layout_width="150sp"
-        android:layout_height="150sp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:background="@drawable/ovalbluebutton"
         
         android:text="@string/send"
@@ -27,8 +27,8 @@
         android:gravity="center"
         
         android:layout_margin="33dp"
-        android:layout_width="100sp"
-        android:layout_height="100sp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:background="@drawable/ovalbutton"
         
         android:text="@string/ohShit"
@@ -42,8 +42,8 @@
         android:gravity="center"
        
         android:layout_margin="33dp"
-        android:layout_width="100sp"
-        android:layout_height="100sp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:background="@drawable/ovalgreenbutton"
         
         android:text="@string/itsOkay"
