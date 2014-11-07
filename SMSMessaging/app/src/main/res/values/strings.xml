@@ -13,10 +13,10 @@
     <string name="pref_message">Message body</string>
     
     <!-- Second button - call da police -->
-    <string name="ohShit">Oh Shit!</string>
+    <string name="ohShit">Emergency</string>
     
     <!-- Third button - everything in okay -->
-    <string name="itsOkay">Nvmd!</string>
+    <string name="itsOkay">All\nClear</string>
 
 
 </resources>

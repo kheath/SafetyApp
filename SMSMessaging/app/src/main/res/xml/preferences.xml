@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <Preference
+    <EditTextPreference
         android:key="pref_recipientNumber"
-        android:title="@string/pref_recipientNumber" >
-        <intent android:action="android.intent.action.PICK"
-            android:mimeType="CommonDataKinds.Phone.CONTENT_TYPE" />
-    </Preference>
+        android:title="@string/pref_recipientNumber"
+        android:defaultValue="" />
     <EditTextPreference
         android:key="pref_message"
         android:title="@string/pref_message"
