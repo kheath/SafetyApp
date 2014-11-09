@@ -40,6 +40,9 @@ public class SMS extends Activity
 	// Initialize this to find out if a phone is in use.
     TelephonyManager tm;
 
+    private static final String PREFS = "prefs";
+    private static final String PREF_CONTACT_NUMBER = "number";
+
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -59,9 +62,7 @@ public class SMS extends Activity
         // create GPS object
         gps = new GPSTracker(SMS.this);
         
-        tm = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);  
-        
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        tm = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
         
         // Code for the big blue button - this sends a text
         btnSendSMS.setOnClickListener(new View.OnClickListener()
@@ -84,7 +85,7 @@ public class SMS extends Activity
                     gps.showSettingsAlert();
                 }
                 
-                if (txtMessage.length()<1)
+                //if (txtMessage.length()<1)
                 {
                 	txtMessage = "Yarr matey, I be in a bit of a pickle.";
                 }
@@ -220,7 +221,7 @@ public class SMS extends Activity
         }
         else
         {
-      	  System.out.println("Not a valid phone number!");
+      	  System.out.println("Not a valid phone number: " + phoneNum);
       	  Toast toast = Toast.makeText(context,
       			  "Please provide a valid phone number",
       			  Toast.LENGTH_SHORT);
@@ -256,11 +257,17 @@ public class SMS extends Activity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
-        if (item.getItemId() == R.id.action_settings) {
+        if (item.getItemId() == R.id.action_set_contact) {
+            // Starts the Set Contact activity on top of the current activity
+            Intent intent = new Intent(this, SetContactActivity.class);
+            startActivity(intent);
+            return true;
+        // TODO
+        /*} else if (item.getItemId() == R.id.action_set_message) {
             // Starts the Settings activity on top of the current activity
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
-            return true;
+            return true;*/
         } else {
             return super.onOptionsItemSelected(item);
         }
@@ -269,11 +276,8 @@ public class SMS extends Activity
     @Override
     public void onResume() {
         super.onResume();
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String newPhoneNo = preferences.getString("pref_recipientNumber", "");
-        String newMessage = preferences.getString("pref_message", "");
+        SharedPreferences preferences = getSharedPreferences(PREFS, MODE_PRIVATE);
+        String newPhoneNo = preferences.getString(PREF_CONTACT_NUMBER, "");
         txtPhoneNo = newPhoneNo;
-        txtMessage = newMessage;
     }
-    
 }

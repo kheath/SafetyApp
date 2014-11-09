@@ -6,11 +6,19 @@
         android:minSdkVersion="14"
         android:targetSdkVersion="19" />
 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />    
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.SEND_SMS"/>
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
-    
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
+    <android:uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <android:uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -27,12 +35,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="myfirstapp.example.com.sms.SettingsActivity"
-            android:label="@string/action_settings" >
+            android:name="myfirstapp.example.com.sms.SetContactActivity"
+            android:label="@string/title_activity_set_contact" >
         </activity>
     </application>
-
-    
-    
 
 </manifest>
