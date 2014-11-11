@@ -52,7 +52,7 @@ public class SMS extends Activity
         btnItsOkay = (Button) findViewById(R.id.btnItsOkay);
         
         // Put in the "emergency" phone number
-        eNumber = "4153200859";
+        eNumber = "14805779529";//"4153200859";
         
         kkMessage = "Yarr matey, the seas be calm.";
         
@@ -117,7 +117,7 @@ public class SMS extends Activity
             }
         });
         
-        // Call da police!
+        // Call da police!  --> Does not work yet
         
         btnOhShit.setOnClickListener(new View.OnClickListener()
         {
@@ -128,8 +128,13 @@ public class SMS extends Activity
             	{
             		if (isValidPhoneNumber(eNumber, getApplicationContext()))
             		{
-            			Intent callIntent = new Intent(Intent.ACTION_CALL, Uri.parse(eNumber)); 
-            			startActivity(callIntent);
+//            			Intent callIntent = new Intent(Intent.ACTION_CALL, Uri.parse(eNumber)); 
+//            			startActivity(callIntent);
+            			Toast toast = Toast.makeText(getBaseContext(),
+                				"This feature is a work in progress",
+                				Toast.LENGTH_SHORT);
+                		toast.setGravity(Gravity.CENTER, 0, 0);
+                		toast.show();  
             		}
             	}
             	else
