@@ -2,6 +2,8 @@
 
 package myfirstapp.example.com.sms;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -11,7 +13,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 import android.view.Gravity;
@@ -29,7 +30,7 @@ public class SMS extends Activity
     Button btnSendSMS;	// Initialize button to send an alert to a friend
     Button btnOhShit;	// Initialize button to call and emergency number
     Button btnItsOkay;	// Initialize button to send an all-clear text to a friend
-    String txtPhoneNo;	// Initialize phone number
+    String[] txtPhoneNos = new String[1];	// Initialize phone number
     String txtMessage;	// Initialize alert message
     String kkMessage;	// Initialize all-clear message
     String eNumber;	// Initialize emergency number
@@ -41,7 +42,7 @@ public class SMS extends Activity
     TelephonyManager tm;
 
     private static final String PREFS = "prefs";
-    private static final String PREF_CONTACT_NUMBER = "number";
+    private static final String PREF_CONTACT_NUMBERS = "numbers";
 
     /** Called when the activity is first created. */
     @Override
@@ -90,31 +91,27 @@ public class SMS extends Activity
                 	txtMessage = "Yarr matey, I be in a bit of a pickle.";
                 }
                 txtMessage = txtMessage + "\n Me location is - \nLat: " + latitude + "\nLong: " + longitude;
-                
-                if (isValidPhoneNumber(txtPhoneNo, getApplicationContext()))
-                {
-                	if (txtPhoneNo.length() == 10)
-                	{
-                		txtPhoneNo = "1"+txtPhoneNo;
-//                		System.out.println("Assuming there should be a 1 in front. \nPhone number: "+txtPhoneNo);
-                    	
-                	}
-                	
-                	sendSMS(txtPhoneNo, txtMessage, tm);
-                }
-                else if (!isValidPhoneNumber(txtPhoneNo, getApplicationContext()))
-                {
-//                	System.out.println(txtPhoneNo + " is not a valid phone number!");
-                }
-                else
-                {
-                	Toast toast = Toast.makeText(getBaseContext(),
-                            "Please enter both a valid phone number and message.",
-                            Toast.LENGTH_SHORT);
-                	toast.setGravity(Gravity.CENTER, 0, 0);
-                	toast.show();
-                }
 
+                for (int i = 0; i < txtPhoneNos.length; i++) {
+                    if (isValidPhoneNumber(txtPhoneNos[i], getApplicationContext())) {
+                        if (txtPhoneNos[i].length() == 10) {
+                            txtPhoneNos[i] = "1" + txtPhoneNos[i];
+//                		System.out.println("Assuming there should be a 1 in front. \nPhone number: "+txtPhoneNos);
+
+                        }
+
+                        sendSMS(txtPhoneNos[i], txtMessage, tm);
+                    //} else if (!isValidPhoneNumber(txtPhoneNos, getApplicationContext())) {
+//                	System.out.println(txtPhoneNos + " is not a valid phone number!");
+                    } else {
+                        Toast toast = Toast.makeText(getBaseContext(),
+                                "One or more phone numbers is not valid.",
+                                Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+                        break;
+                    }
+                }
             }
         });
         
@@ -153,31 +150,29 @@ public class SMS extends Activity
             @Override
 			public void onClick(View v)
             {
-                
-                if (isValidPhoneNumber(txtPhoneNo, getApplicationContext()))
-                {
-                	if (txtPhoneNo.length() == 10)
-                	{
-                		txtPhoneNo = "1"+txtPhoneNo;
-                		System.out.println("Assuming there should be a 1 in front. \nPhone number: "+txtPhoneNo);
-                    	
-                	}
-                
-                	sendSMS(txtPhoneNo, kkMessage, tm);
-                }
-                else if (!isValidPhoneNumber(txtPhoneNo, getApplicationContext()))
-                {
-//                	System.out.println(txtPhoneNo + " is not a valid phone number!");
-                }
-                else
-                {
-                	Toast toast = Toast.makeText(getBaseContext(),
-                            "Please enter a valid phone number.",
-                            Toast.LENGTH_SHORT);
-                	toast.setGravity(Gravity.CENTER, 0, 0);
-                	toast.show();
-                }
+                for (int i = 0; i < txtPhoneNos.length; i++) {
+                    if (isValidPhoneNumber(txtPhoneNos[i], getApplicationContext())) {
+                        if (txtPhoneNos[i].length() == 10) {
+                            txtPhoneNos[i] = "1" + txtPhoneNos[i];
+                            System.out.println("Assuming there should be a 1 in front. \nPhone number: " + txtPhoneNos[i]);
 
+                        }
+
+                        sendSMS(txtPhoneNos[i], kkMessage, tm);
+                    }
+                    //else if (!isValidPhoneNumber(txtPhoneNos, getApplicationContext()))
+                    //{
+//                	System.out.println(txtPhoneNos + " is not a valid phone number!");
+                    //}
+                    else {
+                        Toast toast = Toast.makeText(getBaseContext(),
+                                "One or more phone numbers is not valid.",
+                                Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+                        break;
+                    }
+                }
             }
         });
         
@@ -277,7 +272,7 @@ public class SMS extends Activity
     public void onResume() {
         super.onResume();
         SharedPreferences preferences = getSharedPreferences(PREFS, MODE_PRIVATE);
-        String newPhoneNo = preferences.getString(PREF_CONTACT_NUMBER, "");
-        txtPhoneNo = newPhoneNo;
+        Set<String> newPhoneNos = preferences.getStringSet(PREF_CONTACT_NUMBERS, new HashSet<String>());
+        txtPhoneNos = newPhoneNos.toArray(txtPhoneNos);
     }
 }

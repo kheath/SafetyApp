@@ -10,7 +10,8 @@
     <!-- Options menu -->
     <string name="action_set_contact">Set recipient contacts</string>
     <string name="action_set_message">Set alert message</string>
-    <string name="button_contact">Select contact</string>
+    <string name="button_contact">Add contact</string>
+    <string name="button_clear">Clear list</string>
 
     <!-- Second button - call da police -->
     <string name="ohShit">Emergency</string>
