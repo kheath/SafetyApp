@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -53,7 +54,7 @@ public class SMS extends Activity
         btnItsOkay = (Button) findViewById(R.id.btnItsOkay);
         
         // Put in the "emergency" phone number
-        eNumber = "4153200859";
+        eNumber = "14153200859";
         
         kkMessage = "Yarr matey, the seas be calm.";
         
@@ -129,8 +130,16 @@ public class SMS extends Activity
             	{
             		if (isValidPhoneNumber(eNumber, getApplicationContext()))
             		{
-            			Intent callIntent = new Intent(Intent.ACTION_CALL, Uri.parse(eNumber)); 
-            			startActivity(callIntent);
+            			Intent callIntent = new Intent(Intent.ACTION_CALL);
+                        callIntent.setData(Uri.parse("tel:1-415-320-0859"));
+                        try {
+                            startActivity(callIntent);
+                            finish();
+                            Log.i("Finished making a call...", "");
+                        } catch (android.content.ActivityNotFoundException ex) {
+                            Toast.makeText(SMS.this,
+                                    "Call failed, please try again later.", Toast.LENGTH_SHORT).show();
+                        }
             		}
             	}
             	else
