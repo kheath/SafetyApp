@@ -4,9 +4,11 @@
     <EditTextPreference
         android:key="pref_recipientNumber"
         android:title="@string/pref_recipientNumber"
+        android:maxLength="11"
         android:defaultValue="" />
     <EditTextPreference
         android:key="pref_message"
         android:title="@string/pref_message"
+        android:maxLength="140"
         android:defaultValue="@string/default_message" />
 </PreferenceScreen>
