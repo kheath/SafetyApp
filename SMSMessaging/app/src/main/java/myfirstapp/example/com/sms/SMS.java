@@ -54,11 +54,8 @@ public class SMS extends Activity
         btnItsOkay = (Button) findViewById(R.id.btnItsOkay);
         
         // Put in the "emergency" phone number
-<<<<<<< HEAD
-        eNumber = "14805779529";//"4153200859";
-=======
+
         eNumber = "14153200859";
->>>>>>> origin/testing
         
         kkMessage = "Yarr matey, the seas be calm.";
         
@@ -134,15 +131,7 @@ public class SMS extends Activity
             	{
             		if (isValidPhoneNumber(eNumber, getApplicationContext()))
             		{
-<<<<<<< HEAD
-//            			Intent callIntent = new Intent(Intent.ACTION_CALL, Uri.parse(eNumber)); 
-//            			startActivity(callIntent);
-            			Toast toast = Toast.makeText(getBaseContext(),
-                				"This feature is a work in progress",
-                				Toast.LENGTH_SHORT);
-                		toast.setGravity(Gravity.CENTER, 0, 0);
-                		toast.show();  
-=======
+
             			Intent callIntent = new Intent(Intent.ACTION_CALL);
                         callIntent.setData(Uri.parse("tel:"+eNumber));
                         try {
@@ -153,7 +142,6 @@ public class SMS extends Activity
                             Toast.makeText(SMS.this,
                                     "Call failed, please try again later.", Toast.LENGTH_SHORT).show();
                         }
->>>>>>> origin/testing
             		}
             	}
             	else
