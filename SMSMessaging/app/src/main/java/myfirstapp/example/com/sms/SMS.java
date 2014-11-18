@@ -131,7 +131,7 @@ public class SMS extends Activity
             		if (isValidPhoneNumber(eNumber, getApplicationContext()))
             		{
             			Intent callIntent = new Intent(Intent.ACTION_CALL);
-                        callIntent.setData(Uri.parse("tel:1-415-320-0859"));
+                        callIntent.setData(Uri.parse("tel:"+eNumber));
                         try {
                             startActivity(callIntent);
                             finish();
@@ -281,9 +281,11 @@ public class SMS extends Activity
         super.onResume();
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String newPhoneNo = preferences.getString("pref_recipientNumber", "");
+        //String newEmeNo = preferences.getString("pref_emergencyNumber", "");
         String newMessage = preferences.getString("pref_message", "");
         txtPhoneNo = newPhoneNo;
         txtMessage = newMessage;
+        //eNumber = newEmeNo;
     }
     
 }
