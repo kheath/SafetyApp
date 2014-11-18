@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
 
 public class SMS extends Activity
 {
@@ -52,7 +54,11 @@ public class SMS extends Activity
         btnItsOkay = (Button) findViewById(R.id.btnItsOkay);
         
         // Put in the "emergency" phone number
+<<<<<<< HEAD
         eNumber = "14805779529";//"4153200859";
+=======
+        eNumber = "14153200859";
+>>>>>>> origin/testing
         
         kkMessage = "Yarr matey, the seas be calm.";
         
@@ -128,6 +134,7 @@ public class SMS extends Activity
             	{
             		if (isValidPhoneNumber(eNumber, getApplicationContext()))
             		{
+<<<<<<< HEAD
 //            			Intent callIntent = new Intent(Intent.ACTION_CALL, Uri.parse(eNumber)); 
 //            			startActivity(callIntent);
             			Toast toast = Toast.makeText(getBaseContext(),
@@ -135,6 +142,18 @@ public class SMS extends Activity
                 				Toast.LENGTH_SHORT);
                 		toast.setGravity(Gravity.CENTER, 0, 0);
                 		toast.show();  
+=======
+            			Intent callIntent = new Intent(Intent.ACTION_CALL);
+                        callIntent.setData(Uri.parse("tel:"+eNumber));
+                        try {
+                            startActivity(callIntent);
+                            finish();
+                            Log.i("Finished making a call...", "");
+                        } catch (android.content.ActivityNotFoundException ex) {
+                            Toast.makeText(SMS.this,
+                                    "Call failed, please try again later.", Toast.LENGTH_SHORT).show();
+                        }
+>>>>>>> origin/testing
             		}
             	}
             	else
@@ -276,9 +295,11 @@ public class SMS extends Activity
         super.onResume();
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String newPhoneNo = preferences.getString("pref_recipientNumber", "");
+        //String newEmeNo = preferences.getString("pref_emergencyNumber", "");
         String newMessage = preferences.getString("pref_message", "");
         txtPhoneNo = newPhoneNo;
         txtMessage = newMessage;
+        //eNumber = newEmeNo;
     }
     
 }
