@@ -76,7 +76,14 @@ public class SMS extends Activity
             @Override
 			public void onClick(View v)
             {
-            	System.out.println(isAirplaneModeOn());
+            	if(isAirplaneModeOn(getApplicationContext())) {
+            		Toast toast = Toast.makeText(getBaseContext(),
+                            "Turn off Airplane Mode!",
+                            Toast.LENGTH_SHORT);
+                	toast.setGravity(Gravity.CENTER, 0, 0);
+                	toast.show();
+            	} 
+            	else{
  
                 // check if GPS enabled     
                 if(gps.canGetLocation()){
@@ -96,7 +103,8 @@ public class SMS extends Activity
                 {
                 	txtMessage = "Yarr matey, I be in a bit of a pickle.";
                 }
-                txtMessage = txtMessage + "\n Me location is - \nLat: " + latitude + "\nLong: " + longitude;
+                txtMessage = txtMessage + "\n Me location is - \n http://maps.google.com/maps?saddr="+latitude+","+longitude;
+                //txtMessage = txtMessage + "\n Me location is - \nLat: " + latitude + "\nLong: " + longitude;
                 
                 if (isValidPhoneNumber(txtPhoneNo, getApplicationContext()))
                 {
@@ -123,6 +131,7 @@ public class SMS extends Activity
                 	toast.show();
                 }
 
+            }
             }
         });
         
@@ -270,10 +279,11 @@ public class SMS extends Activity
     * @param context
     * @return true if enabled.
     */
-    private static String isAirplaneModeOn() {
-
-       return Settings.Global.AIRPLANE_MODE_RADIOS;
-
+    
+    public static boolean isAirplaneModeOn(Context context) {        
+        return Settings.Global.getInt(context.getContentResolver(), 
+                Settings.Global.AIRPLANE_MODE_ON, 0) != 0;
+               
     }
     
     @Override
