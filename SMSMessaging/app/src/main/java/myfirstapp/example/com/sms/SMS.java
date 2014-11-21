@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -52,12 +53,15 @@ public class SMS extends Activity
         btnSendSMS = (Button) findViewById(R.id.btnSendSMS);
         btnOhShit = (Button) findViewById(R.id.btnOhShit);
         btnItsOkay = (Button) findViewById(R.id.btnItsOkay);
+        btnItsOkay.setVisibility(View.GONE);
         
         // Put in the "emergency" phone number
 
         eNumber = "14153200859";
         
         kkMessage = "Yarr matey, the seas be calm.";
+        
+        
         
         // create GPS object
         gps = new GPSTracker(SMS.this);
@@ -72,6 +76,7 @@ public class SMS extends Activity
             @Override
 			public void onClick(View v)
             {
+            	System.out.println(isAirplaneModeOn());
  
                 // check if GPS enabled     
                 if(gps.canGetLocation()){
@@ -103,6 +108,7 @@ public class SMS extends Activity
                 	}
                 	
                 	sendSMS(txtPhoneNo, txtMessage, tm);
+                	btnItsOkay.setVisibility(View.VISIBLE);
                 }
                 else if (!isValidPhoneNumber(txtPhoneNo, getApplicationContext()))
                 {
@@ -175,6 +181,7 @@ public class SMS extends Activity
                 	}
                 
                 	sendSMS(txtPhoneNo, kkMessage, tm);
+                	btnItsOkay.setVisibility(View.GONE);
                 }
                 else if (!isValidPhoneNumber(txtPhoneNo, getApplicationContext()))
                 {
@@ -255,6 +262,18 @@ public class SMS extends Activity
         {
         	return true;
         }
+    }
+    
+    /**
+    * Gets the state of Airplane Mode.
+    * 
+    * @param context
+    * @return true if enabled.
+    */
+    private static String isAirplaneModeOn() {
+
+       return Settings.Global.AIRPLANE_MODE_RADIOS;
+
     }
     
     @Override

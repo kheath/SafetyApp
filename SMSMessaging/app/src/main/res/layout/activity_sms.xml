@@ -11,11 +11,11 @@
         android:layout_centerHorizontal="true"
         
         android:gravity="center"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="0dp"
         android:layout_marginBottom="15dp"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:background="@drawable/ovalbluebutton"
+        android:layout_width="match_parent"
+        android:layout_height="275dp"
+        
         
         android:text="@string/send"
         android:textColor="#e1e1e1"
@@ -24,14 +24,15 @@
     <Button
         android:id="@+id/btnOhShit"
         android:layout_below="@+id/btnSendSMS"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentLeft="true"
+        
         android:gravity="center"
         
         android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:background="@drawable/ovalbutton"
+        android:layout_marginBottom="30dp"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        
         
         android:text="@string/ohShit"
         android:textColor="#e1e1e1"
@@ -39,15 +40,16 @@
     
     <Button
         android:id="@+id/btnItsOkay"
-        android:layout_below="@+id/btnOhShit"
-        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/btnSendSMS"
+        android:layout_toRightOf="@+id/btnOhShit"
+        android:layout_alignParentRight="true"
         android:gravity="center"
        
         android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:background="@drawable/ovalgreenbutton"
+        android:layout_marginBottom="30dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        
         
         android:text="@string/itsOkay"
         android:textColor="#e1e1e1"

@@ -16,7 +16,7 @@
     <string name="ohShit">Emergency</string>
     
     <!-- Third button - everything in okay -->
-    <string name="itsOkay">All\nClear</string>
+    <string name="itsOkay">All Clear</string>
 
 
 </resources>
