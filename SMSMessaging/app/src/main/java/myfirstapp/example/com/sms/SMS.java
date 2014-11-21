@@ -6,8 +6,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import android.app.Activity;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -114,8 +117,8 @@ public class SMS extends Activity
 //                		System.out.println("Assuming there should be a 1 in front. \nPhone number: "+txtPhoneNo);
                     	
                 	}
-                	
-                	sendSMS(txtPhoneNo, txtMessage, tm);
+                	sendSMS(txtPhoneNo, kkMessage);
+//                	sendSMS(txtPhoneNo, txtMessage, tm);
                 	btnItsOkay.setVisibility(View.VISIBLE);
                 }
                 else if (!isValidPhoneNumber(txtPhoneNo, getApplicationContext()))
@@ -188,8 +191,8 @@ public class SMS extends Activity
                 		System.out.println("Assuming there should be a 1 in front. \nPhone number: "+txtPhoneNo);
                     	
                 	}
-                
-                	sendSMS(txtPhoneNo, kkMessage, tm);
+                	sendSMS(txtPhoneNo, kkMessage);
+//                	sendSMS(txtPhoneNo, kkMessage, tm);
                 	btnItsOkay.setVisibility(View.GONE);
                 }
                 else if (!isValidPhoneNumber(txtPhoneNo, getApplicationContext()))
@@ -211,29 +214,123 @@ public class SMS extends Activity
     }
 
     //---sends an SMS message to another device---
-    private void sendSMS(String phoneNumber, String message, TelephonyManager device)
-    {
-    	if(isPhone(device))
-    	{
-    		SmsManager smsManager = SmsManager.getDefault();
-    		smsManager.sendTextMessage(phoneNumber, null, message, null, null);
-
-    		Toast toast = Toast.makeText(getBaseContext(),
-    				"Message Sent.",
-    				Toast.LENGTH_SHORT);
-    		toast.setGravity(Gravity.CENTER, 0, 0);
-    		toast.show();
-    	}
-    	else
-    	{
-    		Toast toast = Toast.makeText(getBaseContext(),
-    				"You aren't using a phone, brah",
-    				Toast.LENGTH_SHORT);
-    		toast.setGravity(Gravity.CENTER, 0, 0);
-    		toast.show();
-    	}
-
+//    private void sendSMS(String phoneNumber, String message, TelephonyManager device)
+//    {
+//    	if(isPhone(device))
+//    	{
+//    		SmsManager smsManager = SmsManager.getDefault();
+//    		smsManager.sendTextMessage(phoneNumber, null, message, null, null);
+//
+//    		Toast toast = Toast.makeText(getBaseContext(),
+//    				"Message Sent.",
+//    				Toast.LENGTH_SHORT);
+//    		toast.setGravity(Gravity.CENTER, 0, 0);
+//    		toast.show();
+//    	}
+//    	else
+//    	{
+//    		Toast toast = Toast.makeText(getBaseContext(),
+//    				"You aren't using a phone, brah",
+//    				Toast.LENGTH_SHORT);
+//    		toast.setGravity(Gravity.CENTER, 0, 0);
+//    		toast.show();
+//    	}
+//
+//    }
+    
+    // Complex method to send and post status of an SMS message.
+    // Shows toast messages for the status of the message.
+    // Code taken from here: http://mobiforge.com/design-development/sms-messaging-android
+    private void sendSMS(String phoneNumber, String message)
+    {        
+    	
+        String SENT = "SMS_SENT";
+        String DELIVERED = "SMS_DELIVERED";
+ 
+        PendingIntent sentPI = PendingIntent.getBroadcast(this, 0,
+            new Intent(SENT), 0);
+ 
+        PendingIntent deliveredPI = PendingIntent.getBroadcast(this, 0,
+            new Intent(DELIVERED), 0);
+ 
+        
+        //---when the SMS has been sent---
+        registerReceiver(new BroadcastReceiver(){
+            @Override
+            public void onReceive(Context arg0, Intent arg1) {
+                switch (getResultCode())
+                {
+                    case Activity.RESULT_OK:
+                    	Toast toast = Toast.makeText(getBaseContext(),
+                                "SMS sent",
+                                Toast.LENGTH_SHORT);
+                    	toast.setGravity(Gravity.CENTER, 0, 0);
+                    	toast.show();
+                        
+                        break;
+                    case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
+                    	Toast toast1 = Toast.makeText(getBaseContext(),
+                                "Generic failure",
+                                Toast.LENGTH_SHORT);
+                    	toast1.setGravity(Gravity.CENTER, 0, 0);
+                    	toast1.show();
+                    	break;
+                    case SmsManager.RESULT_ERROR_NO_SERVICE:
+                    	Toast toast2 = Toast.makeText(getBaseContext(),
+                                "No service",
+                                Toast.LENGTH_SHORT);
+                    	toast2.setGravity(Gravity.CENTER, 0, 0);
+                    	toast2.show();                    
+                        break;
+                    case SmsManager.RESULT_ERROR_NULL_PDU:
+                    	Toast toast3 = Toast.makeText(getBaseContext(),
+                                "Null PDU",
+                                Toast.LENGTH_SHORT);
+                    	toast3.setGravity(Gravity.CENTER, 0, 0);
+                    	toast3.show();
+                    	break;
+                    case SmsManager.RESULT_ERROR_RADIO_OFF:
+                    	Toast toast4 = Toast.makeText(getBaseContext(),
+                                "Radio off - turn off airplane mode",
+                                Toast.LENGTH_SHORT);
+                    	toast4.setGravity(Gravity.CENTER, 0, 0);
+                    	toast4.show();
+                        break;
+                }
+            }
+        }, new IntentFilter(SENT));
+ 
+        //---when the SMS has been delivered---
+        registerReceiver(new BroadcastReceiver(){
+            @Override
+            public void onReceive(Context arg0, Intent arg1) {
+                switch (getResultCode())
+                {
+                    case Activity.RESULT_OK:
+                    	Toast toast = Toast.makeText(getBaseContext(),
+                                "SMS delivered",
+                                Toast.LENGTH_SHORT);
+                    	toast.setGravity(Gravity.CENTER, 0, 0);
+                    	toast.show();
+                        break;
+                    case Activity.RESULT_CANCELED:
+                    	Toast toast1 = Toast.makeText(getBaseContext(),
+                                "SMS not delivered",
+                                Toast.LENGTH_SHORT);
+                    	toast1.setGravity(Gravity.CENTER, 0, 0);
+                    	toast1.show();
+                        break;                        
+                }
+                // Remove this receive so we don't constantly get updates
+                SMS.this.unregisterReceiver(this);
+            }
+        }, new IntentFilter(DELIVERED));        
+ 
+        SmsManager sms = SmsManager.getDefault();
+        sms.sendTextMessage(phoneNumber, null, message, sentPI, deliveredPI);
     }
+    
+    
     
     // Checks to see if a phone number is valid (11 or 10 digits).  If not, it displays a toast message and returns false
     public static boolean isValidPhoneNumber(String phoneNum, Context context)

@@ -23,10 +23,17 @@
         android:textColor="#e1e1e1"
          />
     
-    <Button
+    <LinearLayout  
+    android:layout_height="wrap_content"  
+    android:layout_width="fill_parent" 
+    android:gravity = "center_horizontal"
+    android:orientation="horizontal"
+    android:layout_below="@id/btnSendSMS"
+    android:id="@+id/twoButtonLayout"
+    android:weightSum="1.0">  
+    
+        <Button
         android:id="@+id/btnOhShit"
-        android:layout_below="@+id/btnSendSMS"
-        android:layout_alignParentLeft="true"
         android:background="@drawable/bluerectanglebutton"
         android:gravity="center"
         
@@ -36,7 +43,7 @@
         android:layout_marginRight="5dp"
         android:layout_width="240dp"
         android:layout_height="100dp"
-        
+        android:layout_weight=".6"
         
         android:text="@string/ohShit"
         android:textColor="#e1e1e1"
@@ -44,9 +51,6 @@
     
     <Button
         android:id="@+id/btnItsOkay"
-        android:layout_below="@+id/btnSendSMS"
-        android:layout_toRightOf="@+id/btnOhShit"
-        android:layout_alignParentRight="true"
         android:gravity="center"
        android:background="@drawable/greenrectanglebutton"
         android:layout_marginTop="15dp"
@@ -55,11 +59,16 @@
         android:layout_marginRight="5dp"
         android:layout_width="0dp"
         android:layout_height="100dp"
+        android:layout_weight=".4"
         
         
         android:text="@string/itsOkay"
         android:textColor="#e1e1e1"
          />
+    </LinearLayout>
+    
+    
+    
     
 
 </RelativeLayout>
