@@ -106,7 +106,12 @@ public class SMS extends Activity
                 {
                 	txtMessage = "Yarr matey, I be in a bit of a pickle.";
                 }
-                txtMessage = txtMessage + "\n Me location is - \n http://maps.google.com/maps?saddr="+latitude+","+longitude;
+                // This link works well with Android devices, but not so much with iphones
+                txtMessage = txtMessage + "\n Me location is - \n http://maps.google.com/maps?daddr="+latitude+","+longitude;
+                
+                // The following uses the iOS url scheme.  This doesn't work on Android devices though
+                //"comgooglemaps://?center="+latitude+","+longitude; 
+                		
                 //txtMessage = txtMessage + "\n Me location is - \nLat: " + latitude + "\nLong: " + longitude;
                 
                 if (isValidPhoneNumber(txtPhoneNo, getApplicationContext()))
@@ -117,7 +122,7 @@ public class SMS extends Activity
 //                		System.out.println("Assuming there should be a 1 in front. \nPhone number: "+txtPhoneNo);
                     	
                 	}
-                	sendSMS(txtPhoneNo, kkMessage);
+                	sendSMS(txtPhoneNo, txtMessage);
 //                	sendSMS(txtPhoneNo, txtMessage, tm);
                 	btnItsOkay.setVisibility(View.VISIBLE);
                 }
