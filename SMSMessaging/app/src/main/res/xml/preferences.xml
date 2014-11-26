@@ -7,6 +7,11 @@
         android:maxLength="11"
         android:defaultValue="" />
     <EditTextPreference
+        android:key="pref_emergencyNumber"
+        android:title="@string/pref_emessage"
+        android:maxLength="11"
+        android:defaultValue="" />
+    <EditTextPreference
         android:key="pref_message"
         android:title="@string/pref_message"
         android:maxLength="140"

@@ -8,20 +8,20 @@
     
     <Button
         android:id="@+id/btnSendSMS"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/redrectanglebutton"
-        android:gravity="center"
-        android:layout_marginTop="40dp"
         android:layout_marginBottom="15dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:textSize="40sp"
-        
+        android:layout_marginTop="40dp"
+        android:background="@drawable/redselector"
+        android:gravity="center"
         android:text="@string/send"
-        android:textColor="#e1e1e1"
-         />
+        android:textColor="#d4d4d4"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif" />
     
     <LinearLayout  
     android:layout_height="wrap_content"  
@@ -34,7 +34,7 @@
     
         <Button
         android:id="@+id/btnOhShit"
-        android:background="@drawable/bluerectanglebutton"
+        android:background="@drawable/blueselector"
         android:gravity="center"
         
         android:layout_marginTop="15dp"
@@ -46,13 +46,14 @@
         android:layout_weight=".6"
         
         android:text="@string/ohShit"
-        android:textColor="#e1e1e1"
-         />
+        android:textColor="#d4d4d4"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif" />
     
     <Button
         android:id="@+id/btnItsOkay"
         android:gravity="center"
-       android:background="@drawable/greenrectanglebutton"
+       android:background="@drawable/greenselector"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="30dp"
         android:layout_marginLeft="5dp"
@@ -63,8 +64,9 @@
         
         
         android:text="@string/itsOkay"
-        android:textColor="#e1e1e1"
-         />
+        android:textColor="#d4d4d4"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif" />
     </LinearLayout>
     
     

@@ -60,7 +60,7 @@ public class SMS extends Activity
         
         // Put in the "emergency" phone number
 
-        eNumber = "14153200859";
+        eNumber = "14805779529";
         
         kkMessage = "Yarr matey, the seas be calm.";
         
@@ -111,7 +111,8 @@ public class SMS extends Activity
                 
                 // The following uses the iOS url scheme.  This doesn't work on Android devices though
                 //"comgooglemaps://?center="+latitude+","+longitude; 
-                		
+                
+                // SMS with just lat and long
                 //txtMessage = txtMessage + "\n Me location is - \nLat: " + latitude + "\nLong: " + longitude;
                 
                 if (isValidPhoneNumber(txtPhoneNo, getApplicationContext()))
@@ -326,7 +327,7 @@ public class SMS extends Activity
                     	toast1.show();
                         break;                        
                 }
-                // Remove this receive so we don't constantly get updates
+                // Remove this receiver so we don't constantly get updates
                 SMS.this.unregisterReceiver(this);
             }
         }, new IntentFilter(DELIVERED));        
@@ -385,7 +386,7 @@ public class SMS extends Activity
     public static boolean isAirplaneModeOn(Context context) {        
         return Settings.Global.getInt(context.getContentResolver(), 
                 Settings.Global.AIRPLANE_MODE_ON, 0) != 0;
-               
+       
     }
     
     @Override
@@ -414,11 +415,11 @@ public class SMS extends Activity
         super.onResume();
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String newPhoneNo = preferences.getString("pref_recipientNumber", "");
-        //String newEmeNo = preferences.getString("pref_emergencyNumber", "");
+        String newEmeNo = preferences.getString("pref_emergencyNumber", "");
         String newMessage = preferences.getString("pref_message", "");
         txtPhoneNo = newPhoneNo;
         txtMessage = newMessage;
-        //eNumber = newEmeNo;
+        eNumber = newEmeNo;
     }
     
 }

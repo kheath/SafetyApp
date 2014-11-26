@@ -11,6 +11,7 @@
     <!-- Settings -->
     <string name="pref_recipientNumber">Recipient number</string>
     <string name="pref_message">Message body</string>
+    <string name="pref_emessage">Emergency Contact</string>
     
     <!-- Second button - call da police -->
     <string name="ohShit">Emergency</string>
