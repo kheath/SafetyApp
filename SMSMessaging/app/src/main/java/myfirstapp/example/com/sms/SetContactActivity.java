@@ -31,6 +31,7 @@ public class SetContactActivity extends Activity {
     ArrayList<String> contactList = new ArrayList<String>();
     static final int REQUEST_SELECT_PHONE_NUMBER = 1;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,28 +70,45 @@ public class SetContactActivity extends Activity {
                  public void onClick(View view) {
                      // Button clears contact list on press
                      mSharedPreferences = getSharedPreferences(PREFS, MODE_PRIVATE);
-                     SharedPreferences.Editor e = mSharedPreferences.edit();
-                     e.clear();
-                     e.apply();
-                     contactList.clear();
-                     arrayAdapterContact.notifyDataSetChanged();
-                     Toast toast = Toast.makeText(getBaseContext(),
-                             "Recipient phone numbers cleared.",
-                             Toast.LENGTH_SHORT);
-                     toast.setGravity(Gravity.CENTER, 0, 0);
-                     toast.show();
+                     Set<String> numbersSet = mSharedPreferences.getStringSet(PREF_CONTACT_NUMBERS, new HashSet<String>());
+                     if (numbersSet.size() > 0) {
+                         SharedPreferences.Editor e = mSharedPreferences.edit();
+                         e.clear();
+                         e.apply();
+                         contactList.clear();
+                         arrayAdapterContact.notifyDataSetChanged();
+                         Toast toast = Toast.makeText(getBaseContext(),
+                                 "Recipient phone numbers cleared.",
+                                 Toast.LENGTH_SHORT);
+                         toast.setGravity(Gravity.CENTER, 0, 0);
+                         toast.show();
+                     } else {
+                         Toast toast = Toast.makeText(getBaseContext(),
+                                 "No contacts to clear.",
+                                 Toast.LENGTH_SHORT);
+                         toast.setGravity(Gravity.CENTER, 0, 0);
+                         toast.show();
+                     }
                  }
              }
         );
-
-/*        // Change the TextView to the set number, if there is one
-        mSharedPreferences = getSharedPreferences(PREFS, MODE_PRIVATE);
-        String number = mSharedPreferences.getString(PREF_CONTACT_NUMBERS, "");
-        if (number.length() > 0) {
-            textViewContact = (TextView) findViewById(R.id.textview_contact);
-            textViewContact.setText(number);
-        }*/
     }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Change the ListView to the set numbers, if there are any
+        mSharedPreferences = getSharedPreferences(PREFS, MODE_PRIVATE);
+        Set<String> numbersSet = mSharedPreferences.getStringSet(PREF_CONTACT_NUMBERS, new HashSet<String>());
+        if (numbersSet.size() > 0) {
+            contactList.clear();
+            contactList.addAll(numbersSet);
+            arrayAdapterContact.notifyDataSetChanged();
+        }
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -115,7 +133,6 @@ public class SetContactActivity extends Activity {
                 e.apply();
                 newestNumber = number;
                 if (newestNumber.length() != 0 ) {
-                    System.out.println("hi");
                     contactList.add(newestNumber);
                     arrayAdapterContact.notifyDataSetChanged();
                 }
