@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#333333"
+    >
+    
+    <Button
+        android:id="@+id/btnSendSMS"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/redselector"
+        android:gravity="center"
+        android:text="@string/send"
+        android:textColor="#d4d4d4"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif" />
+    
+    <LinearLayout  
+    android:layout_height="wrap_content"  
+    android:layout_width="fill_parent" 
+    android:gravity = "center_horizontal"
+    android:orientation="horizontal"
+    android:layout_below="@id/btnSendSMS"
+    android:id="@+id/twoButtonLayout"
+    android:weightSum="1.0">  
+    
+        <Button
+        android:id="@+id/btnOhShit"
+        android:background="@drawable/blueselector"
+        android:gravity="center"
+        
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_weight=".6"
+        
+        android:text="@string/ohShit"
+        android:textColor="#d4d4d4"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif" />
+    
+    <Button
+        android:id="@+id/btnItsOkay"
+        android:gravity="center"
+       android:background="@drawable/greenselector"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_weight=".4"
+        
+        
+        android:text="@string/itsOkay"
+        android:textColor="#d4d4d4"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif" />
+    </LinearLayout>
+    
+    
+    
+    
+
+</RelativeLayout>
+
