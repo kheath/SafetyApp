@@ -10,12 +10,11 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
-
-    <android:uses-permission
+    <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="18" />
-    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <android:uses-permission
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="18" />
 
@@ -37,6 +36,16 @@
         <activity
             android:name="myfirstapp.example.com.sms.SetContactActivity"
             android:label="@string/title_activity_set_contact" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="myfirstapp.example.com.sms.SMS" />
+        </activity>
+        <activity
+            android:name="myfirstapp.example.com.sms.SetMessageActivity"
+            android:label="@string/title_activity_set_message" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="myfirstapp.example.com.sms.SMS" />
         </activity>
     </application>
 

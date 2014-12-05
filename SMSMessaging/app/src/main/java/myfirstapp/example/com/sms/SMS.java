@@ -43,6 +43,7 @@ public class SMS extends Activity
 
     private static final String PREFS = "prefs";
     private static final String PREF_CONTACT_NUMBERS = "numbers";
+    private static final String PREF_MESSAGE = "message";
 
     /** Called when the activity is first created. */
     @Override
@@ -87,10 +88,10 @@ public class SMS extends Activity
                 }
                 
                 //if (txtMessage.length()<1)
-                {
-                	txtMessage = "Yarr matey, I be in a bit of a pickle.";
-                }
-                txtMessage = txtMessage + "\n Me location is - \nLat: " + latitude + "\nLong: " + longitude;
+                //{
+                //	txtMessage = "Yarr matey, I be in a bit of a pickle.";
+                //}
+                txtMessage = txtMessage + "\n My location is - \nLat: " + latitude + "\nLong: " + longitude;
 
                 for (int i = 0; i < txtPhoneNos.length; i++) {
                     if (isValidPhoneNumber(txtPhoneNos[i], getApplicationContext())) {
@@ -257,12 +258,11 @@ public class SMS extends Activity
             Intent intent = new Intent(this, SetContactActivity.class);
             startActivity(intent);
             return true;
-        // TODO
-        /*} else if (item.getItemId() == R.id.action_set_message) {
+        } else if (item.getItemId() == R.id.action_set_message) {
             // Starts the Settings activity on top of the current activity
-            Intent intent = new Intent(this, SettingsActivity.class);
+            Intent intent = new Intent(this, SetMessageActivity.class);
             startActivity(intent);
-            return true;*/
+            return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
@@ -274,5 +274,8 @@ public class SMS extends Activity
         SharedPreferences preferences = getSharedPreferences(PREFS, MODE_PRIVATE);
         Set<String> newPhoneNos = preferences.getStringSet(PREF_CONTACT_NUMBERS, new HashSet<String>());
         txtPhoneNos = newPhoneNos.toArray(txtPhoneNos);
+
+        String newMessage = preferences.getString(PREF_MESSAGE, "Yarr matey, I be in a bit of a pickle.");
+        txtMessage = newMessage;
     }
 }

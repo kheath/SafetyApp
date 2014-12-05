@@ -8,18 +8,25 @@
     <string name="default_message">Yarr matey, I be in a bit of a pickle.</string>
 
     <!-- Options menu -->
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_set_contact">Set contacts</string>
     <string name="action_set_contact">Set recipient contacts</string>
-    <string name="action_set_message">Set alert message</string>
     <string name="button_contact">Add contact</string>
     <string name="button_clear">Clear list</string>
+
+    <string name="title_activity_set_message">Set message</string>
+    <string name="action_set_message">Set alert message</string>
+    <string name="button_edit">Update message</string>
+    <string name="button_reset">Reset to default</string>
+    <string name="message_hint">Write your message here</string>
 
     <!-- Second button - call da police -->
     <string name="ohShit">Emergency</string>
 
     <!-- Third button - everything in okay -->
     <string name="itsOkay">All\nClear</string>
-    <string name="title_activity_set_contact">SetContactActivity</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+
+    <!-- Settings stuff -->
+
 
 </resources>
