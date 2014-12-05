@@ -2,6 +2,9 @@
 
 package myfirstapp.example.com.sms;
 
+
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -11,6 +14,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -36,6 +41,7 @@ public class SMS extends Activity
     Button btnICE;	// Initialize button to call and emergency number
     Button btnItsOkay;	// Initialize button to send an all-clear text to a friend
     String txtPhoneNo;	// Initialize phone number
+    String[] txtPhoneNos = new String[1];	// Initialize phone number
     String txtMessage;	// Initialize alert message
     String kkMessage;	// Initialize all-clear message
     String eNumber;	// Initialize emergency number
@@ -45,6 +51,11 @@ public class SMS extends Activity
     
 	// Initialize this to find out if a phone is in use.
     TelephonyManager tm;
+
+    private static final String PREFS = "prefs";
+    private static final String PREF_CONTACT_NUMBERS = "numbers";
+    private static final String PREF_MESSAGE = "message";
+
 
     /** Called when the activity is first created. */
     @Override
@@ -62,7 +73,7 @@ public class SMS extends Activity
 
         eNumber = "";
         
-        kkMessage = "Yarr matey, the seas be calm.";
+        kkMessage = "Everything is fine now. No need to worry.";
         
         
         
@@ -102,44 +113,28 @@ public class SMS extends Activity
                     gps.showSettingsAlert();
                 }
                 
-                if (txtMessage.length()<1)
-                {
-                	txtMessage = "Hi! I'm in a sketchy situation, and I'm somewhat concerned. If you don't hear from me, ";
-                }
-                // This link works well with Android devices, but not so much with iphones
-                txtMessage = txtMessage + "\n my location is - \n http://maps.google.com/maps?daddr="+latitude+","+longitude;
-                
-                // The following uses the iOS url scheme.  This doesn't work on Android devices though
-                //"comgooglemaps://?center="+latitude+","+longitude; 
-                
-                // SMS with just lat and long
-                //txtMessage = txtMessage + "\n Me location is - \nLat: " + latitude + "\nLong: " + longitude;
-                
-                if (isValidPhoneNumber(txtPhoneNo, getApplicationContext()))
-                {
-                	if (txtPhoneNo.length() == 10)
-                	{
-                		txtPhoneNo = "1"+txtPhoneNo;
-                    	
-                	}
-                	sendSMS(txtPhoneNo, txtMessage);
-                	btnItsOkay.setVisibility(View.VISIBLE);
-                }
-                else if (!isValidPhoneNumber(txtPhoneNo, getApplicationContext()))
-                {
-                }
-                else
-                {
-                	Toast toast = Toast.makeText(getBaseContext(),
-                            "Please enter both a valid phone number and message.",
-                            Toast.LENGTH_SHORT);
-                	toast.setGravity(Gravity.CENTER, 0, 0);
-                	toast.show();
-                }
+                txtMessage = txtMessage + "If you don't hear from me, \n my location is - \nLat: " + latitude + "\nLong: " + longitude;
 
-            }
+                for (int i = 0; i < txtPhoneNos.length; i++) {
+                    if (isValidPhoneNumber(txtPhoneNos[i], getApplicationContext())) {
+                        if (txtPhoneNos[i].length() == 10) {
+                            txtPhoneNos[i] = "1" + txtPhoneNos[i];
+                        }
+
+                        sendSMS(txtPhoneNos[i], txtMessage, tm);
+                        btnItsOkay.setVisibility(View.VISIBLE);
+                    } else if (!isValidPhoneNumber(txtPhoneNo, getApplicationContext())) {
+                        Toast toast = Toast.makeText(getBaseContext(),
+                                "One or more phone numbers is not valid.",
+                                Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+                        break;
+                    }
+                }
             }
         });
+        
         
         // Call da police!  --> Works now!
         
@@ -209,7 +204,6 @@ public class SMS extends Activity
                 	toast.setGravity(Gravity.CENTER, 0, 0);
                 	toast.show();
                 }
-
             }
         });
         
@@ -307,8 +301,6 @@ public class SMS extends Activity
         sms.sendTextMessage(phoneNumber, null, message, sentPI, deliveredPI);
     }
     
-    
-    
     // Checks to see if a phone number is valid (11 or 10 digits).  If not, it displays a toast message and returns false
     public static boolean isValidPhoneNumber(String phoneNum, Context context)
     {
@@ -322,7 +314,7 @@ public class SMS extends Activity
         }
         else
         {
-      	  System.out.println("Not a valid phone number!");
+      	  System.out.println("Not a valid phone number: " + phoneNum);
       	  Toast toast = Toast.makeText(context,
       			  "Please provide a valid phone number",
       			  Toast.LENGTH_SHORT);
@@ -330,7 +322,6 @@ public class SMS extends Activity
       	  toast.show();
       	  return false;
         }
-        
     }
     
     // Checks to see if this app is running on a phone
@@ -360,6 +351,20 @@ public class SMS extends Activity
        
     }
     
+    // Checks to see if this app is running on a phone
+    public static boolean isPhone(TelephonyManager device)
+    {
+    	
+        if(device.getPhoneType() == 0)
+        {
+        	return false;
+        }
+        else
+        {
+        	return true;
+        }
+    }
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu items for use in the action bar
@@ -371,9 +376,14 @@ public class SMS extends Activity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
-        if (item.getItemId() == R.id.action_settings) {
+        if (item.getItemId() == R.id.action_set_contact) {
+            // Starts the Set Contact activity on top of the current activity
+            Intent intent = new Intent(this, SetContactActivity.class);
+            startActivity(intent);
+            return true;
+        } else if (item.getItemId() == R.id.action_set_message) {
             // Starts the Settings activity on top of the current activity
-            Intent intent  = new Intent(this, SettingsActivity.class);
+            Intent intent = new Intent(this, SetMessageActivity.class);
             startActivity(intent);
             return true;
         } else {
@@ -384,13 +394,11 @@ public class SMS extends Activity
     @Override
     public void onResume() {
         super.onResume();
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String newPhoneNo = preferences.getString("pref_recipientNumber", "");
-        String newEmeNo = preferences.getString("pref_emergencyNumber", "");
-        String newMessage = preferences.getString("pref_message", "");
-        txtPhoneNo = newPhoneNo;
+        SharedPreferences preferences = getSharedPreferences(PREFS, MODE_PRIVATE);
+        Set<String> newPhoneNos = preferences.getStringSet(PREF_CONTACT_NUMBERS, new HashSet<String>());
+        txtPhoneNos = newPhoneNos.toArray(txtPhoneNos);
+
+        String newMessage = preferences.getString(PREF_MESSAGE, "Hi! I'm in a sketchy situation, and I'm somewhat concerned.");
         txtMessage = newMessage;
-        eNumber = newEmeNo;
     }
-    
 }
