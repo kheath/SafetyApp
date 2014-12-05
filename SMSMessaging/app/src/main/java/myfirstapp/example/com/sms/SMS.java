@@ -33,7 +33,7 @@ public class SMS extends Activity
 	
 	
     Button btnSendSMS;	// Initialize button to send an alert to a friend
-    Button btnOhShit;	// Initialize button to call and emergency number
+    Button btnICE;	// Initialize button to call and emergency number
     Button btnItsOkay;	// Initialize button to send an all-clear text to a friend
     String txtPhoneNo;	// Initialize phone number
     String txtMessage;	// Initialize alert message
@@ -54,13 +54,13 @@ public class SMS extends Activity
         setContentView(R.layout.activity_sms);
 
         btnSendSMS = (Button) findViewById(R.id.btnSendSMS);
-        btnOhShit = (Button) findViewById(R.id.btnOhShit);
+        btnICE = (Button) findViewById(R.id.btnICE);
         btnItsOkay = (Button) findViewById(R.id.btnItsOkay);
         btnItsOkay.setVisibility(View.GONE);
         
         // Put in the "emergency" phone number
 
-        eNumber = "14805779529";
+        eNumber = "";
         
         kkMessage = "Yarr matey, the seas be calm.";
         
@@ -73,7 +73,7 @@ public class SMS extends Activity
         
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         
-        // Code for the big blue button - this sends a text
+        // Code for the big button - this sends a text
         btnSendSMS.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -104,10 +104,10 @@ public class SMS extends Activity
                 
                 if (txtMessage.length()<1)
                 {
-                	txtMessage = "Yarr matey, I be in a bit of a pickle.";
+                	txtMessage = "Hi! I'm in a sketchy situation, and I'm somewhat concerned. If you don't hear from me, ";
                 }
                 // This link works well with Android devices, but not so much with iphones
-                txtMessage = txtMessage + "\n Me location is - \n http://maps.google.com/maps?daddr="+latitude+","+longitude;
+                txtMessage = txtMessage + "\n my location is - \n http://maps.google.com/maps?daddr="+latitude+","+longitude;
                 
                 // The following uses the iOS url scheme.  This doesn't work on Android devices though
                 //"comgooglemaps://?center="+latitude+","+longitude; 
@@ -120,16 +120,13 @@ public class SMS extends Activity
                 	if (txtPhoneNo.length() == 10)
                 	{
                 		txtPhoneNo = "1"+txtPhoneNo;
-//                		System.out.println("Assuming there should be a 1 in front. \nPhone number: "+txtPhoneNo);
                     	
                 	}
                 	sendSMS(txtPhoneNo, txtMessage);
-//                	sendSMS(txtPhoneNo, txtMessage, tm);
                 	btnItsOkay.setVisibility(View.VISIBLE);
                 }
                 else if (!isValidPhoneNumber(txtPhoneNo, getApplicationContext()))
                 {
-//                	System.out.println(txtPhoneNo + " is not a valid phone number!");
                 }
                 else
                 {
@@ -144,17 +141,17 @@ public class SMS extends Activity
             }
         });
         
-        // Call da police!  --> Does not work yet
+        // Call da police!  --> Works now!
         
-        btnOhShit.setOnClickListener(new View.OnClickListener()
+        btnICE.setOnClickListener(new View.OnClickListener()
         {
             @Override
 			public void onClick(View v)
             {
             	if(isPhone(tm))
             	{
-            		if (isValidPhoneNumber(eNumber, getApplicationContext()))
-            		{
+//            		if (isValidPhoneNumber(eNumber, getApplicationContext()))
+//            		{
 
             			Intent callIntent = new Intent(Intent.ACTION_CALL);
                         callIntent.setData(Uri.parse("tel:"+eNumber));
@@ -166,7 +163,7 @@ public class SMS extends Activity
                             Toast.makeText(SMS.this,
                                     "Call failed, please try again later.", Toast.LENGTH_SHORT).show();
                         }
-            		}
+//            		}
             	}
             	else
             	{
@@ -198,7 +195,6 @@ public class SMS extends Activity
                     	
                 	}
                 	sendSMS(txtPhoneNo, kkMessage);
-//                	sendSMS(txtPhoneNo, kkMessage, tm);
                 	btnItsOkay.setVisibility(View.GONE);
                 }
                 else if (!isValidPhoneNumber(txtPhoneNo, getApplicationContext()))
@@ -219,31 +215,6 @@ public class SMS extends Activity
         
     }
 
-    //---sends an SMS message to another device---
-//    private void sendSMS(String phoneNumber, String message, TelephonyManager device)
-//    {
-//    	if(isPhone(device))
-//    	{
-//    		SmsManager smsManager = SmsManager.getDefault();
-//    		smsManager.sendTextMessage(phoneNumber, null, message, null, null);
-//
-//    		Toast toast = Toast.makeText(getBaseContext(),
-//    				"Message Sent.",
-//    				Toast.LENGTH_SHORT);
-//    		toast.setGravity(Gravity.CENTER, 0, 0);
-//    		toast.show();
-//    	}
-//    	else
-//    	{
-//    		Toast toast = Toast.makeText(getBaseContext(),
-//    				"You aren't using a phone, brah",
-//    				Toast.LENGTH_SHORT);
-//    		toast.setGravity(Gravity.CENTER, 0, 0);
-//    		toast.show();
-//    	}
-//
-//    }
-    
     // Complex method to send and post status of an SMS message.
     // Shows toast messages for the status of the message.
     // Code taken from here: http://mobiforge.com/design-development/sms-messaging-android
@@ -402,7 +373,7 @@ public class SMS extends Activity
         // Handle presses on the action bar items
         if (item.getItemId() == R.id.action_settings) {
             // Starts the Settings activity on top of the current activity
-            Intent intent = new Intent(this, SettingsActivity.class);
+            Intent intent  = new Intent(this, SettingsActivity.class);
             startActivity(intent);
             return true;
         } else {

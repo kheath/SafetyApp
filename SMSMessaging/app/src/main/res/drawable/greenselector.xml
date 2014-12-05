@@ -9,5 +9,7 @@
     <item
         android:drawable="@drawable/greenrectanglebutton"
         android:state_pressed="false" />
+    <item android:drawable="@drawable/greenbuttonpressed"
+          android:state_focused="true" />
 
 </selector>

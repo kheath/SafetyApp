@@ -33,7 +33,7 @@
     android:weightSum="1.0">  
     
         <Button
-        android:id="@+id/btnOhShit"
+        android:id="@+id/btnICE"
         android:background="@drawable/blueselector"
         android:gravity="center"
         
@@ -45,7 +45,7 @@
         android:layout_height="100dp"
         android:layout_weight=".6"
         
-        android:text="@string/ohShit"
+        android:text="@string/trouble"
         android:textColor="#d4d4d4"
         android:textStyle="bold"
         android:fontFamily="sans-serif" />

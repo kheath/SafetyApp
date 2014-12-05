@@ -6,7 +6,7 @@
     <string name="number">Enter the phone number of the recipient</string>
     <string name="send">Send Alert</string>
     <string name="action_settings">Settings</string>
-    <string name="default_message">Yarr matey, I be in a bit of a pickle.</string>
+    <string name="default_message">Hi! I\'m in a sketchy situation, and I\'m somewhat concerned.</string>
     
     <!-- Settings -->
     <string name="pref_recipientNumber">Recipient number</string>
@@ -14,7 +14,7 @@
     <string name="pref_emessage">Emergency Contact</string>
     
     <!-- Second button - call da police -->
-    <string name="ohShit">Emergency</string>
+    <string name="trouble">Emergency</string>
     
     <!-- Third button - everything in okay -->
     <string name="itsOkay">All Clear</string>
