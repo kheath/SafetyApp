@@ -14,12 +14,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
@@ -80,60 +77,57 @@ public class SMS extends Activity
         // create GPS object
         gps = new GPSTracker(SMS.this);
         
-        tm = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);  
-        
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        tm = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
         
         // Code for the big button - this sends a text
-        btnSendSMS.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-			public void onClick(View v)
-            {
-            	if(isAirplaneModeOn(getApplicationContext())) {
-            		Toast toast = Toast.makeText(getBaseContext(),
-                            "Turn off Airplane Mode!",
-                            Toast.LENGTH_SHORT);
-                	toast.setGravity(Gravity.CENTER, 0, 0);
-                	toast.show();
-            	} 
-            	else{
- 
-                // check if GPS enabled     
-                if(gps.canGetLocation()){
-                     
-                    latitude = gps.getLatitude();
-                    longitude = gps.getLongitude();
-                     
+        btnSendSMS.setOnClickListener(new View.OnClickListener() {
+                                          @Override
+                                          public void onClick(View v) {
+                                              if (isAirplaneModeOn(getApplicationContext())) {
+                                                  Toast toast = Toast.makeText(getBaseContext(),
+                                                          "Turn off Airplane Mode!",
+                                                          Toast.LENGTH_SHORT);
+                                                  toast.setGravity(Gravity.CENTER, 0, 0);
+                                                  toast.show();
+                                              } else {
 
-                }else{
-                    // can't get location
-                    // GPS or Network is not enabled
-                    // Ask user to enable GPS/network in settings
-                    gps.showSettingsAlert();
-                }
-                
-                txtMessage = txtMessage + "If you don't hear from me, \n my location is - \nLat: " + latitude + "\nLong: " + longitude;
+                                                  // check if GPS enabled
+                                                  if (gps.canGetLocation()) {
 
-                for (int i = 0; i < txtPhoneNos.length; i++) {
-                    if (isValidPhoneNumber(txtPhoneNos[i], getApplicationContext())) {
-                        if (txtPhoneNos[i].length() == 10) {
-                            txtPhoneNos[i] = "1" + txtPhoneNos[i];
-                        }
+                                                      latitude = gps.getLatitude();
+                                                      longitude = gps.getLongitude();
 
-                        sendSMS(txtPhoneNos[i], txtMessage, tm);
-                        btnItsOkay.setVisibility(View.VISIBLE);
-                    } else if (!isValidPhoneNumber(txtPhoneNo, getApplicationContext())) {
-                        Toast toast = Toast.makeText(getBaseContext(),
-                                "One or more phone numbers is not valid.",
-                                Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER, 0, 0);
-                        toast.show();
-                        break;
-                    }
-                }
-            }
-        });
+
+
+
+                                                  txtMessage = txtMessage + "\n If you don't hear from me, \n my location is - \n http://maps.google.com/maps?daddr=" + latitude + "," + longitude;
+
+                                                  for (int i = 0; i < txtPhoneNos.length; i++) {
+                                                      if (isValidPhoneNumber(txtPhoneNos[i], getApplicationContext())) {
+                                                          if (txtPhoneNos[i].length() == 10) {
+                                                              txtPhoneNos[i] = "1" + txtPhoneNos[i];
+                                                          }
+
+                                                          sendSMS(txtPhoneNos[i], txtMessage);
+                                                          btnItsOkay.setVisibility(View.VISIBLE);
+                                                      } else if (!isValidPhoneNumber(txtPhoneNo, getApplicationContext())) {
+                                                          Toast toast = Toast.makeText(getBaseContext(),
+                                                                  "One or more phone numbers is not valid.",
+                                                                  Toast.LENGTH_SHORT);
+                                                          toast.setGravity(Gravity.CENTER, 0, 0);
+                                                          toast.show();
+                                                          break;
+                                                      }
+                                                  }
+                                                  } else {
+                                                      // can't get location
+                                                      // GPS or Network is not enabled
+                                                      // Ask user to enable GPS/network in settings
+                                                      gps.showSettingsAlert();
+                                                  }
+                                              }
+                                          }
+                                      });
         
         
         // Call da police!  --> Works now!
@@ -180,29 +174,24 @@ public class SMS extends Activity
             @Override
 			public void onClick(View v)
             {
-                
-                if (isValidPhoneNumber(txtPhoneNo, getApplicationContext()))
-                {
-                	if (txtPhoneNo.length() == 10)
-                	{
-                		txtPhoneNo = "1"+txtPhoneNo;
-                		System.out.println("Assuming there should be a 1 in front. \nPhone number: "+txtPhoneNo);
-                    	
-                	}
-                	sendSMS(txtPhoneNo, kkMessage);
-                	btnItsOkay.setVisibility(View.GONE);
-                }
-                else if (!isValidPhoneNumber(txtPhoneNo, getApplicationContext()))
-                {
+                for (int i = 0; i < txtPhoneNos.length; i++) {
+                    if (isValidPhoneNumber(txtPhoneNos[i], getApplicationContext())) {
+                        if (txtPhoneNos[i].length() == 10) {
+                            txtPhoneNos[i] = "1" + txtPhoneNos[i];
+                            System.out.println("Assuming there should be a 1 in front. \nPhone number: " + txtPhoneNo);
+
+                        }
+                        sendSMS(txtPhoneNos[i], kkMessage);
+                        btnItsOkay.setVisibility(View.GONE);
+                    } else if (!isValidPhoneNumber(txtPhoneNos[i], getApplicationContext())) {
 //                	System.out.println(txtPhoneNo + " is not a valid phone number!");
-                }
-                else
-                {
-                	Toast toast = Toast.makeText(getBaseContext(),
-                            "Please enter a valid phone number.",
-                            Toast.LENGTH_SHORT);
-                	toast.setGravity(Gravity.CENTER, 0, 0);
-                	toast.show();
+                    } else {
+                        Toast toast = Toast.makeText(getBaseContext(),
+                                "Please enter a valid phone number.",
+                                Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+                    }
                 }
             }
         });
@@ -349,20 +338,6 @@ public class SMS extends Activity
         return Settings.Global.getInt(context.getContentResolver(), 
                 Settings.Global.AIRPLANE_MODE_ON, 0) != 0;
        
-    }
-    
-    // Checks to see if this app is running on a phone
-    public static boolean isPhone(TelephonyManager device)
-    {
-    	
-        if(device.getPhoneType() == 0)
-        {
-        	return false;
-        }
-        else
-        {
-        	return true;
-        }
     }
     
     @Override
