@@ -1,13 +1,14 @@
-package myfirstapp.example.com.sms.tests;
+package com.safetyapp.sms.tests;
 
+
+import com.safetyapp.sms.GPSTracker;
+import com.safetyapp.sms.SMS;
 
 import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
 
 import junit.framework.Assert;
 
-import myfirstapp.example.com.sms.GPSTracker;
-import myfirstapp.example.com.sms.SMS;
 
 
 /* public class GPSTrackerTest extends ActivityInstrumentationTestCase2<GPSTracker>{

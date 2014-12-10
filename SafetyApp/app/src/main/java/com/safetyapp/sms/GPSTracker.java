@@ -1,4 +1,4 @@
-package myfirstapp.example.com.sms;
+package com.safetyapp.sms;
 
 import android.app.AlertDialog;
 import android.app.Service;

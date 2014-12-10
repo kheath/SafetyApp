@@ -1,12 +1,13 @@
-package myfirstapp.example.com.sms.tests;
+package com.safetyapp.sms.tests;
 
+
+import com.safetyapp.sms.SMS;
 
 import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
 
 import junit.framework.Assert;
 import android.telephony.TelephonyManager;
-import myfirstapp.example.com.sms.SMS;
 
 
 public class SMSTest2 extends ActivityInstrumentationTestCase2<SMS>{

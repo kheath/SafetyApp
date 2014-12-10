@@ -1,12 +1,14 @@
 
 
-package myfirstapp.example.com.sms;
+package com.safetyapp.sms;
 
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import myfirstapp.example.com.sms.R;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -89,6 +91,13 @@ public class SMS extends Activity
                                                           Toast.LENGTH_SHORT);
                                                   toast.setGravity(Gravity.CENTER, 0, 0);
                                                   toast.show();
+                                              } else if (txtPhoneNos[0]==null) {
+                                            	  Toast toast = Toast.makeText(getBaseContext(),
+                                                          "Please add a contact!",
+                                                          Toast.LENGTH_SHORT);
+                                                  toast.setGravity(Gravity.CENTER, 0, 0);
+                                                  toast.show();
+                                                  
                                               } else {
 
                                                   // check if GPS enabled
@@ -174,24 +183,33 @@ public class SMS extends Activity
             @Override
 			public void onClick(View v)
             {
-                for (int i = 0; i < txtPhoneNos.length; i++) {
-                    if (isValidPhoneNumber(txtPhoneNos[i], getApplicationContext())) {
-                        if (txtPhoneNos[i].length() == 10) {
-                            txtPhoneNos[i] = "1" + txtPhoneNos[i];
-                            System.out.println("Assuming there should be a 1 in front. \nPhone number: " + txtPhoneNo);
-
-                        }
-                        sendSMS(txtPhoneNos[i], kkMessage);
-                        btnItsOkay.setVisibility(View.GONE);
-                    } else if (!isValidPhoneNumber(txtPhoneNos[i], getApplicationContext())) {
-//                	System.out.println(txtPhoneNo + " is not a valid phone number!");
-                    } else {
-                        Toast toast = Toast.makeText(getBaseContext(),
-                                "Please enter a valid phone number.",
-                                Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER, 0, 0);
-                        toast.show();
-                    }
+            	if (txtPhoneNos[0]==null) {
+              	  Toast toast = Toast.makeText(getBaseContext(),
+                            "Please add a contact!",
+                            Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                    
+                } else{
+	                for (int i = 0; i < txtPhoneNos.length; i++) {
+	                    if (isValidPhoneNumber(txtPhoneNos[i], getApplicationContext())) {
+	                        if (txtPhoneNos[i].length() == 10) {
+	                            txtPhoneNos[i] = "1" + txtPhoneNos[i];
+	                            System.out.println("Assuming there should be a 1 in front. \nPhone number: " + txtPhoneNo);
+	
+	                        }
+	                        sendSMS(txtPhoneNos[i], kkMessage);
+	                        btnItsOkay.setVisibility(View.GONE);
+	                    } else if (!isValidPhoneNumber(txtPhoneNos[i], getApplicationContext())) {
+	//                	System.out.println(txtPhoneNo + " is not a valid phone number!");
+	                    } else {
+	                        Toast toast = Toast.makeText(getBaseContext(),
+	                                "Please enter a valid phone number.",
+	                                Toast.LENGTH_SHORT);
+	                        toast.setGravity(Gravity.CENTER, 0, 0);
+	                        toast.show();
+	                    }
+	                }
                 }
             }
         });
@@ -293,17 +311,18 @@ public class SMS extends Activity
     // Checks to see if a phone number is valid (11 or 10 digits).  If not, it displays a toast message and returns false
     public static boolean isValidPhoneNumber(String phoneNum, Context context)
     {
-   
-        Pattern pattern = Pattern.compile("[0-9]{10,11}");
+    	if (phoneNum.length() < 1) {
+        	return false;
+        }
+    	
+    	Pattern pattern = Pattern.compile("[0-9]{10,11}");
         Matcher matcher = pattern.matcher(phoneNum);
    
         if (matcher.matches()) {
-      	  System.out.println("Phone Number is Valid");
       	  return true;
         }
         else
         {
-      	  System.out.println("Not a valid phone number: " + phoneNum);
       	  Toast toast = Toast.makeText(context,
       			  "Please provide a valid phone number",
       			  Toast.LENGTH_SHORT);

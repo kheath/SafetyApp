@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="myfirstapp.example.com.sms.SetMessageActivity"
+    tools:context="com.safetyapp.sms.SetMessageActivity"
     >
 
     <TextView

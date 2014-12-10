@@ -1,10 +1,11 @@
-package myfirstapp.example.com.sms.tests;
+package com.safetyapp.sms.tests;
 
 
+
+import com.safetyapp.sms.*;
 
 import android.test.ActivityInstrumentationTestCase2;
 import junit.framework.*;
-import myfirstapp.example.com.sms.*;
 import android.content.Context;
 
 
