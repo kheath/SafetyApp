@@ -3,13 +3,13 @@
 package com.safetyapp.sms;
 
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import myfirstapp.example.com.sms.R;
-
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -40,13 +40,15 @@ public class SMS extends Activity
     Button btnICE;	// Initialize button to call and emergency number
     Button btnItsOkay;	// Initialize button to send an all-clear text to a friend
     String txtPhoneNo;	// Initialize phone number
-    String[] txtPhoneNos = new String[1];	// Initialize phone number
+    ArrayList<String> txtPhoneNos = new ArrayList<String>();	// Initialize phone number
     String txtMessage;	// Initialize alert message
     String kkMessage;	// Initialize all-clear message
     String eNumber;	// Initialize emergency number
     GPSTracker gps;	// Initialize gps
     double latitude;
     double longitude;
+    
+    
     
 	// Initialize this to find out if a phone is in use.
     TelephonyManager tm;
@@ -85,13 +87,17 @@ public class SMS extends Activity
         btnSendSMS.setOnClickListener(new View.OnClickListener() {
                                           @Override
                                           public void onClick(View v) {
+                                        	  
+                                        	  System.out.println("Arraylist is: " + txtPhoneNos);
+                                              System.out.println(txtPhoneNos.isEmpty());
+                                        	  
                                               if (isAirplaneModeOn(getApplicationContext())) {
                                                   Toast toast = Toast.makeText(getBaseContext(),
                                                           "Turn off Airplane Mode!",
                                                           Toast.LENGTH_SHORT);
                                                   toast.setGravity(Gravity.CENTER, 0, 0);
                                                   toast.show();
-                                              } else if (txtPhoneNos[0]==null) {
+                                              } else if (txtPhoneNos.isEmpty()) {
                                             	  Toast toast = Toast.makeText(getBaseContext(),
                                                           "Please add a contact!",
                                                           Toast.LENGTH_SHORT);
@@ -111,13 +117,13 @@ public class SMS extends Activity
 
                                                   txtMessage = txtMessage + "\n If you don't hear from me, \n my location is - \n http://maps.google.com/maps?daddr=" + latitude + "," + longitude;
 
-                                                  for (int i = 0; i < txtPhoneNos.length; i++) {
-                                                      if (isValidPhoneNumber(txtPhoneNos[i], getApplicationContext())) {
-                                                          if (txtPhoneNos[i].length() == 10) {
-                                                              txtPhoneNos[i] = "1" + txtPhoneNos[i];
+                                                  for (int i = 0; i < txtPhoneNos.size(); i++) {
+                                                      if (isValidPhoneNumber(txtPhoneNos.get(i), getApplicationContext())) {
+                                                          if (txtPhoneNos.get(i).length() == 10) {
+                                                              txtPhoneNos.set(i,"1" + txtPhoneNos.get(i));
                                                           }
 
-                                                          sendSMS(txtPhoneNos[i], txtMessage);
+                                                          sendSMS(txtPhoneNos.get(i), txtMessage);
                                                           btnItsOkay.setVisibility(View.VISIBLE);
                                                       } else if (!isValidPhoneNumber(txtPhoneNo, getApplicationContext())) {
                                                           Toast toast = Toast.makeText(getBaseContext(),
@@ -183,7 +189,7 @@ public class SMS extends Activity
             @Override
 			public void onClick(View v)
             {
-            	if (txtPhoneNos[0]==null) {
+            	if (txtPhoneNos.isEmpty()) {
               	  Toast toast = Toast.makeText(getBaseContext(),
                             "Please add a contact!",
                             Toast.LENGTH_SHORT);
@@ -191,16 +197,16 @@ public class SMS extends Activity
                     toast.show();
                     
                 } else{
-	                for (int i = 0; i < txtPhoneNos.length; i++) {
-	                    if (isValidPhoneNumber(txtPhoneNos[i], getApplicationContext())) {
-	                        if (txtPhoneNos[i].length() == 10) {
-	                            txtPhoneNos[i] = "1" + txtPhoneNos[i];
+	                for (int i = 0; i < txtPhoneNos.size(); i++) {
+	                    if (isValidPhoneNumber(txtPhoneNos.get(i), getApplicationContext())) {
+	                        if (txtPhoneNos.get(i).length() == 10) {
+	                            txtPhoneNos.set(i,"1" + txtPhoneNos.get(i));
 	                            System.out.println("Assuming there should be a 1 in front. \nPhone number: " + txtPhoneNo);
 	
 	                        }
-	                        sendSMS(txtPhoneNos[i], kkMessage);
+	                        sendSMS(txtPhoneNos.get(i), kkMessage);
 	                        btnItsOkay.setVisibility(View.GONE);
-	                    } else if (!isValidPhoneNumber(txtPhoneNos[i], getApplicationContext())) {
+	                    } else if (!isValidPhoneNumber(txtPhoneNos.get(i), getApplicationContext())) {
 	//                	System.out.println(txtPhoneNo + " is not a valid phone number!");
 	                    } else {
 	                        Toast toast = Toast.makeText(getBaseContext(),
@@ -390,7 +396,11 @@ public class SMS extends Activity
         super.onResume();
         SharedPreferences preferences = getSharedPreferences(PREFS, MODE_PRIVATE);
         Set<String> newPhoneNos = preferences.getStringSet(PREF_CONTACT_NUMBERS, new HashSet<String>());
-        txtPhoneNos = newPhoneNos.toArray(txtPhoneNos);
+        txtPhoneNos.clear();
+        if(!newPhoneNos.isEmpty()) {
+        	txtPhoneNos.addAll(newPhoneNos); // newPhoneNos.toArray(txtPhoneNos);
+        }
+        
 
         String newMessage = preferences.getString(PREF_MESSAGE, "Hi! I'm in a sketchy situation, and I'm somewhat concerned.");
         txtMessage = newMessage;
