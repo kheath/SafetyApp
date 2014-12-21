@@ -26,5 +26,9 @@
     <string name="button_edit">Update message</string>
     <string name="button_reset">Reset to default</string>
     <string name="message_hint">Write your message here</string>
+    
+    <string name="action_set_enum">Set Emergency Contact</string>
+    <string name="emergency_num">911</string>
+    <string name="edit_emergency_num">Update Emergency Contact</string>
 
 </resources>

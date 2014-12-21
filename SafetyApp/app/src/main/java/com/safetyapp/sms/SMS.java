@@ -56,6 +56,7 @@ public class SMS extends Activity
     private static final String PREFS = "prefs";
     private static final String PREF_CONTACT_NUMBERS = "numbers";
     private static final String PREF_MESSAGE = "message";
+    private static final String PREF_E_CONTACT = "econtact";
 
 
     /** Called when the activity is first created. */
@@ -152,6 +153,7 @@ public class SMS extends Activity
             @Override
 			public void onClick(View v)
             {
+            	System.out.println("Emergency contact is: "+eNumber);
             	if(isPhone(tm))
             	{
 //            		if (isValidPhoneNumber(eNumber, getApplicationContext()))
@@ -315,7 +317,7 @@ public class SMS extends Activity
     }
     
     // Checks to see if a phone number is valid (11 or 10 digits).  If not, it displays a toast message and returns false
-    public static boolean isValidPhoneNumber(String phoneNum, Context context)
+    public boolean isValidPhoneNumber(String phoneNum, Context context)
     {
     	if (phoneNum.length() < 1) {
         	return false;
@@ -386,6 +388,11 @@ public class SMS extends Activity
             Intent intent = new Intent(this, SetMessageActivity.class);
             startActivity(intent);
             return true;
+        } else if (item.getItemId() == R.id.action_set_enum) {
+            // Starts the Settings activity on top of the current activity
+            Intent intent = new Intent(this, SetEmergencyActivity.class);
+            startActivity(intent);
+            return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
@@ -404,5 +411,11 @@ public class SMS extends Activity
 
         String newMessage = preferences.getString(PREF_MESSAGE, "Hi! I'm in a sketchy situation, and I'm somewhat concerned.");
         txtMessage = newMessage;
+        
+        String emergencyNumber = preferences.getString(PREF_E_CONTACT, "911");
+        eNumber = emergencyNumber;
+        		
     }
+    
+    
 }

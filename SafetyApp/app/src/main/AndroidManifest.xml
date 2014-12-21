@@ -51,6 +51,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="myfirstapp.example.com.sms.SMS" />
         </activity>
+        <activity
+            android:name="com.safetyapp.sms.SetEmergencyActivity"
+            android:label="@string/action_set_enum" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="myfirstapp.example.com.sms.SMS" />
+        </activity>
     </application>
 
 </manifest>
